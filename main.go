@@ -1,11 +1,10 @@
 package main
 
 import (
-	_ "catapi-app/routers"
-	beego "github.com/beego/beego/v2/server/web"
+    "github.com/beego/beego/v2/server/web"
+    _ "catapi-app/routers"
 )
 
 func main() {
-	beego.Run()
+    web.Run()
 }
-
