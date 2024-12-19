@@ -1,44 +1,68 @@
+<!-- views/index.tpl -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cat Gallery</title>
+    <title>Cat Browser</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold text-center mb-8">Cat Gallery</h1>
-        
-        <div class="flex justify-between items-center mb-8">
-            <div class="w-64">
-                <select id="breed-select" class="w-full p-2 border rounded-lg">
-                    <option value="">All Breeds</option>
-                </select>
+        <div class="tabs flex justify-center space-x-4 mb-8">
+            <button id="voting-tab" class="tab-btn active">
+                <i class="fas fa-arrow-up-arrow-down"></i>
+                <span>Voting</span>
+            </button>
+            <button id="breeds-tab" class="tab-btn">
+                <i class="fas fa-search"></i>
+                <span>Breeds</span>
+            </button>
+            <button id="favs-tab" class="tab-btn">
+                <i class="fas fa-heart"></i>
+                <span>Favs</span>
+            </button>
+        </div>
+
+        <!-- Breeds Section -->
+        <div id="breeds-section" class="mb-8 hidden">
+            <select id="breed-select" class="w-full max-w-xs mx-auto block p-2 border rounded-lg">
+                <option value="">Select Breed</option>
+            </select>
+        </div>
+
+        <!-- Cat Image Section -->
+        <div id="cat-display" class="cat-container max-w-2xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+            <div id="loading" class="hidden">
+                <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
             </div>
-            
-            <button id="refresh-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                Refresh Cats
-            </button>
+
+            <div id="cat-image-section" class="relative">
+                <img id="cat-image" src="" alt="Cat" class="w-full object-cover">
+                <div class="action-buttons absolute bottom-4 left-0 right-0 flex justify-center space-x-4">
+                    <button id="dislike-btn" class="action-btn bg-white p-3 rounded-full shadow-lg">
+                        <i class="fas fa-thumbs-down text-red-500"></i>
+                    </button>
+                    <button id="favorite-btn" class="action-btn bg-white p-3 rounded-full shadow-lg">
+                        <i class="fas fa-heart text-gray-400"></i>
+                    </button>
+                    <button id="like-btn" class="action-btn bg-white p-3 rounded-full shadow-lg">
+                        <i class="fas fa-thumbs-up text-green-500"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        
-        <div id="loading" class="text-center hidden">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-        </div>
-        
-        <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-            <span id="error-message"></span>
-        </div>
-        
-        <div id="cat-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-        
-        <div class="text-center mt-8">
-            <button id="load-more" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">
-                Load More
-            </button>
+
+        <!-- Favs Section -->
+        <div id="favs-section" class="mb-8 hidden">
+            <div id="favs-container">
+                <!-- Favorite images will be inserted here -->
+            </div>
         </div>
     </div>
+
     <script src="/static/js/app.js"></script>
 </body>
 </html>

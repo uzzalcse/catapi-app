@@ -1,13 +1,36 @@
-.cat-card {
-    transition: transform 0.2s;
+/* static/css/style.css */
+.tab-btn {
+    @apply px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors;
 }
 
-.cat-card:hover {
-    transform: translateY(-5px);
+.tab-btn.active {
+    @apply bg-blue-500 text-white;
 }
 
-.cat-image {
-    height: 300px;
-    width: 100%;
-    object-fit: cover;
+.tab-btn:not(.active) {
+    @apply bg-gray-200 hover:bg-gray-300;
+}
+
+.action-btn {
+    @apply transition-transform hover:scale-110;
+}
+
+.action-btn i {
+    @apply text-xl;
+}
+
+#cat-image {
+    height: 500px;
+}
+
+.cat-container {
+    position: relative;
+    min-height: 500px;
+}
+
+#loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
