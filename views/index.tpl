@@ -1,4 +1,3 @@
-<!-- views/index.tpl -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,6 +30,23 @@
             <select id="breed-select" class="w-full max-w-xs mx-auto block p-2 border rounded-lg">
                 <option value="">Select Breed</option>
             </select>
+
+            <!-- Single Breed Image Container -->
+            <div id="breed-image-container" class="mt-4 text-center w-1/2 mx-auto overflow-hidden h-[400px]">
+                <img id="breed-cat-image" src="" alt="Breed Cat" class="mx-auto cover" style="display:none;" />
+            </div>
+
+            <!-- Carousel Dots for manual navigation -->
+            <div id="carousel-dots" class="flex justify-center mt-2 space-x-2">
+                <!-- Dots will be dynamically added here -->
+            </div>
+
+            <div id="breed-details" class="mt-4">
+                <p id="breed-name" class="font-semibold text-lg"></p>
+                <p id="breed-id" class="text-gray-500"></p>
+                <p id="breed-description" class="text-gray-700 mt-2"></p>
+                <a id="breed-wiki-link">Wikipedia</a>
+            </div>
         </div>
 
         <!-- Cat Image Section -->
@@ -45,7 +61,7 @@
                     <button id="dislike-btn" class="action-btn bg-white p-3 rounded-full shadow-lg">
                         <i class="fas fa-thumbs-down text-red-500"></i>
                     </button>
-                    <button id="favorite-btn" class="action-btn bg-white p-3 rounded-full shadow-lg">
+                    <button id="favorite-btn" class="action-btn bg-white p-3 rounded-full shadow-lg animate-pulse">
                         <i class="fas fa-heart text-gray-400"></i>
                     </button>
                     <button id="like-btn" class="action-btn bg-white p-3 rounded-full shadow-lg">
