@@ -66,8 +66,21 @@ const listViewBtn = document.getElementById('list-view-btn');
     });
 
     // Event listeners for buttons (like, dislike, favorite)
-    likeBtn.addEventListener('click', loadNewCatForVoting);
-    dislikeBtn.addEventListener('click', loadNewCatForVoting);
+    // likeBtn.addEventListener('click', loadNewCatForVoting);
+    // dislikeBtn.addEventListener('click', loadNewCatForVoting);
+
+    // Event listener for like button
+    likeBtn.addEventListener('click', function() {
+        postVote(1); // 1 for like vote
+        loadNewCatForVoting();
+    });
+
+    // Event listener for dislike button
+    dislikeBtn.addEventListener('click', function() {
+        postVote(-1); // -1 for dislike vote
+        loadNewCatForVoting();
+    });
+
     favoriteBtn.addEventListener('click', function () {
         addCatToFavorites();
         loadNewCatForVoting(); // Load a new cat image after saving to favorites
@@ -499,6 +512,43 @@ const listViewBtn = document.getElementById('list-view-btn');
             console.error('Error adding cat to favorites:', error);
         });
     }
+
+    // Function to post vote to the Beego server
+async function postVote(voteValue) {
+    const imageId = currentImageId; // Get the current image ID
+    const subId = "user-123"; // Replace with the actual user ID or leave it empty if not required
+
+    const voteData = {
+        image_id: imageId,
+        sub_id: subId,
+        value: voteValue, // 1 for like, -1 for dislike
+    };
+
+    try {
+        const response = await fetch('/api/vote', {  // API endpoint for your Beego server
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(voteData),
+        });
+
+        console.log(response);
+
+        if (!response.ok) {
+            throw new Error('Failed to post vote');
+        }
+
+        // If vote is successfully posted, load a new cat image for voting
+        loadNewCatForVoting();
+    } catch (error) {
+        console.error('Error posting vote:', error);
+        // Optionally, handle errors such as showing an alert to the user
+    }
+}
+
+
+
     
 
 
