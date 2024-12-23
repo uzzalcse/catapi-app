@@ -33,11 +33,18 @@ type BreedImage struct {
 	Breeds []Breed `json:"breeds"`
 }
 
+type Image struct {
+    ID  string `json:"id"`
+    URL string `json:"url"`
+}
 
+// Favorite structure for each favorite with a nested image field
 type Favorite struct {
-    ID      int    `json:"id"`
-    ImageID string `json:"image_id"`
-    SubID   string `json:"sub_id"`
+    ID        int    `json:"id"`
+    ImageID   string `json:"image_id"`
+    SubID     string `json:"sub_id"` // SubID can be null
+    CreatedAt string `json:"created_at"`
+    Image     Image  `json:"image"` // Nested Image field
 }
 
 // Model for the response when fetching favorites

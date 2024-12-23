@@ -166,55 +166,55 @@ func (c *MainController) Vote() {
 	c.ServeJSON()
 }
 
-func (c *MainController) AddToFavorite() {
-	var fav models.Favorite
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &fav); err != nil {
-		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
-		c.Data["json"] = map[string]string{"error": err.Error()}
-		c.ServeJSON()
-		return
-	}
+// func (c *MainController) AddToFavorite() {
+// 	var fav models.Favorite
+// 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &fav); err != nil {
+// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+// 		c.Data["json"] = map[string]string{"error": err.Error()}
+// 		c.ServeJSON()
+// 		return
+// 	}
 
-	errChan := make(chan error)
+// 	errChan := make(chan error)
 
-	go func() {
-		apiKey, _ := beego.AppConfig.String("cat_api_key")
-		baseURL, _ := beego.AppConfig.String("api_base_url")
+// 	go func() {
+// 		apiKey, _ := beego.AppConfig.String("cat_api_key")
+// 		baseURL, _ := beego.AppConfig.String("api_base_url")
 
-		body, _ := json.Marshal(map[string]string{"image_id": fav.ImageID})
-		req, err := http.NewRequest("POST", baseURL+"/favourites", bytes.NewBuffer(body))
-		if err != nil {
-			errChan <- err
-			return
-		}
+// 		body, _ := json.Marshal(map[string]string{"image_id": fav.ImageID})
+// 		req, err := http.NewRequest("POST", baseURL+"/favourites", bytes.NewBuffer(body))
+// 		if err != nil {
+// 			errChan <- err
+// 			return
+// 		}
 
-		req.Header.Add("x-api-key", apiKey)
-		req.Header.Add("Content-Type", "application/json")
+// 		req.Header.Add("x-api-key", apiKey)
+// 		req.Header.Add("Content-Type", "application/json")
 
-		client := &http.Client{}
-		resp, err := client.Do(req)
-		if err != nil {
-			errChan <- err
-			return
-		}
-		defer resp.Body.Close()
+// 		client := &http.Client{}
+// 		resp, err := client.Do(req)
+// 		if err != nil {
+// 			errChan <- err
+// 			return
+// 		}
+// 		defer resp.Body.Close()
 
-		if resp.StatusCode != http.StatusOK {
-			errChan <- fmt.Errorf("failed to add favorite")
-			return
-		}
+// 		if resp.StatusCode != http.StatusOK {
+// 			errChan <- fmt.Errorf("failed to add favorite")
+// 			return
+// 		}
 
-		errChan <- nil
-	}()
+// 		errChan <- nil
+// 	}()
 
-	if err := <-errChan; err != nil {
-		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-		c.Data["json"] = map[string]string{"error": err.Error()}
-	} else {
-		c.Data["json"] = map[string]string{"status": "success"}
-	}
-	c.ServeJSON()
-}
+// 	if err := <-errChan; err != nil {
+// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+// 		c.Data["json"] = map[string]string{"error": err.Error()}
+// 	} else {
+// 		c.Data["json"] = map[string]string{"status": "success"}
+// 	}
+// 	c.ServeJSON()
+// }
 
 func (c *MainController) GetBreedImages() {
 	breedID := c.GetString(":breed_id")
@@ -316,5 +316,137 @@ func (c *MainController) GetBreedInfo() {
 	}
 
 	c.Data["json"] = breed
+	c.ServeJSON()
+}
+
+
+
+// AddToFavorite adds a cat image to the user's favorites
+func (c *MainController) AddToFavorite() {
+	var favoriteReq struct {
+		ImageID string `json:"image_id"`
+	}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &favoriteReq); err != nil {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+		c.Data["json"] = map[string]string{"error": "Invalid request payload"}
+		c.ServeJSON()
+		return
+	}
+
+	// Hardcoded sub_id
+	subID := "user-123"
+	apiKey, _ := beego.AppConfig.String("cat_api_key")
+	apiURL, _ := beego.AppConfig.String("api_base_url")
+
+	// Prepare request body
+	body, _ := json.Marshal(map[string]string{
+		"image_id": favoriteReq.ImageID,
+		"sub_id":   subID,
+	})
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/favourites", apiURL), bytes.NewBuffer(body))
+	if err != nil {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+		c.Data["json"] = map[string]string{"error": err.Error()}
+		c.ServeJSON()
+		return
+	}
+
+	req.Header.Add("x-api-key", apiKey)
+	req.Header.Add("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+		c.Data["json"] = map[string]string{"error": "Failed to add to favorites"}
+		c.ServeJSON()
+		return
+	}
+	defer resp.Body.Close()
+
+	var favoriteResp models.Favorite
+	if err := json.NewDecoder(resp.Body).Decode(&favoriteResp); err != nil {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+		c.Data["json"] = map[string]string{"error": "Invalid response from server"}
+		c.ServeJSON()
+		return
+	}
+
+	c.Data["json"] = favoriteResp
+	c.ServeJSON()
+}
+
+// GetFavorites fetches all the user's favorites
+func (c *MainController) GetFavorites() {
+    apiKey, _ := beego.AppConfig.String("cat_api_key")
+    apiURL, _ := beego.AppConfig.String("api_base_url")
+
+    req, err := http.NewRequest("GET", fmt.Sprintf("%s/favourites", apiURL), nil)
+    if err != nil {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": err.Error()}
+        c.ServeJSON()
+        return
+    }
+
+    req.Header.Add("x-api-key", apiKey)
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil || resp.StatusCode != http.StatusOK {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": "Failed to fetch favorites"}
+        c.ServeJSON()
+        return
+    }
+    defer resp.Body.Close()
+
+    var favorites []models.Favorite
+    if err := json.NewDecoder(resp.Body).Decode(&favorites); err != nil {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": "Invalid response from server"}
+        c.ServeJSON()
+        return
+    }
+
+    c.Data["json"] = favorites
+    c.ServeJSON()
+}
+
+
+// RemoveFromFavorite removes a favorite by its ID
+func (c *MainController) RemoveFromFavorite() {
+	favoriteID := c.GetString(":favorite_id")
+	if favoriteID == "" {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+		c.Data["json"] = map[string]string{"error": "favorite_id is required"}
+		c.ServeJSON()
+		return
+	}
+
+	apiKey, _ := beego.AppConfig.String("cat_api_key")
+	apiURL, _ := beego.AppConfig.String("api_base_url")
+
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/favourites/%s", apiURL, favoriteID), nil)
+	if err != nil {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+		c.Data["json"] = map[string]string{"error": err.Error()}
+		c.ServeJSON()
+		return
+	}
+
+	req.Header.Add("x-api-key", apiKey)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+		c.Data["json"] = map[string]string{"error": "Failed to remove favorite"}
+		c.ServeJSON()
+		return
+	}
+	defer resp.Body.Close()
+
+	c.Data["json"] = map[string]string{"status": "success"}
 	c.ServeJSON()
 }

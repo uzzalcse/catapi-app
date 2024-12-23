@@ -229,33 +229,117 @@ document.addEventListener('DOMContentLoaded', function () {
         catImage.style.display = 'block';
     }
 
+    // function loadFavorites() {
+    //     favsContainer.innerHTML = '';
+    //     if (favoriteCats.length > 0) {
+    //         favoriteCats.forEach(fav => {
+    //             const favImage = document.createElement('img');
+    //             favImage.src = fav.url;
+    //             favImage.alt = fav.name || 'Favorite Cat';
+    //             favsContainer.appendChild(favImage);
+    //         });
+    //     } else {
+    //         favsContainer.innerHTML = '<p>No favorites yet.</p>';
+    //     }
+    // }
+
+    // function loadFavorites() {
+    //     favsContainer.innerHTML = ''; // Clear any previous content
+    
+    //     fetch('/favorites')  // Fetch favorites from the /favorites API endpoint
+    //         .then(response => response.json())  // Parse the JSON response
+    //         .then(favorites => {
+    //             if (favorites.length > 0) {
+    //                 favorites.forEach(fav => {
+    //                     // Create an image element for each favorite
+    //                     const favImage = document.createElement('img');
+    //                     favImage.src = fav.image.url;  // Use the nested `image.url`
+    //                     favImage.alt = 'Favorite Cat';
+    //                     favsContainer.appendChild(favImage);  // Add the image to the container
+    //                 });
+    //             } else {
+    //                 favsContainer.innerHTML = '<p>No favorites yet.</p>';
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error loading favorites:', error);
+    //             favsContainer.innerHTML = '<p>Error loading favorites.</p>';
+    //         });
+    // }
+
     function loadFavorites() {
-        favsContainer.innerHTML = '';
-        if (favoriteCats.length > 0) {
-            favoriteCats.forEach(fav => {
-                const favImage = document.createElement('img');
-                favImage.src = fav.url;
-                favImage.alt = fav.name || 'Favorite Cat';
-                favsContainer.appendChild(favImage);
+        favsContainer.innerHTML = ''; // Clear any previous content
+        
+        fetch('/favorites')  // Fetch favorites from the /favorites API endpoint
+            .then(response => response.json())  // Parse the JSON response
+            .then(favorites => {
+                // Remove duplicates based on the image URL or ID (adjust as needed)
+                const uniqueFavorites = Array.from(new Set(favorites.map(fav => fav.image.url)))
+                    .map(url => favorites.find(fav => fav.image.url === url));
+                
+                if (uniqueFavorites.length > 0) {
+                    uniqueFavorites.forEach(fav => {
+                        // Create an image element for each favorite
+                        const favImage = document.createElement('img');
+                        favImage.src = fav.image.url;  // Use the nested `image.url`
+                        favImage.alt = 'Favorite Cat';
+                        favsContainer.appendChild(favImage);  // Add the image to the container
+                    });
+                } else {
+                    favsContainer.innerHTML = '<p>No favorites yet.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading favorites:', error);
+                favsContainer.innerHTML = '<p>Error loading favorites.</p>';
             });
-        } else {
-            favsContainer.innerHTML = '<p>No favorites yet.</p>';
-        }
     }
+    
+    
+    
+
+    // function addCatToFavorites() {
+    //     const catData = {
+    //         id: currentImageId,
+    //         url: catImage.src,
+    //         name: catImage.alt || 'Unnamed Cat'
+    //     };
+
+    //     if (!favoriteCats.some(cat => cat.id === catData.id)) {
+    //         favoriteCats.push(catData);
+    //         localStorage.setItem('favoriteCats', JSON.stringify(favoriteCats));
+    //         console.log('Cat added to favorites:', catData);
+    //     }
+    // }
 
     function addCatToFavorites() {
         const catData = {
-            id: currentImageId,
-            url: catImage.src,
-            name: catImage.alt || 'Unnamed Cat'
+            image_id: currentImageId
         };
-
-        if (!favoriteCats.some(cat => cat.id === catData.id)) {
-            favoriteCats.push(catData);
-            localStorage.setItem('favoriteCats', JSON.stringify(favoriteCats));
-            console.log('Cat added to favorites:', catData);
-        }
+    
+        fetch('/favorites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(catData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to add cat to favorites');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Cat added to favorites on server:', data);
+        })
+        .catch(error => {
+            console.error('Error adding cat to favorites:', error);
+        });
     }
+    
+
+
 
     function updateFavoriteButton() {
         const isFavorite = favoriteCats.some(cat => cat.id === currentImageId);
