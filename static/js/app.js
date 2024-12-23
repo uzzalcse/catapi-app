@@ -6,6 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
     let favoriteCats = JSON.parse(localStorage.getItem('favoriteCats')) || [];
     let currentBreedImageIndex = 0; // Track the current index of the breed carousel
     let imageChangeInterval; // Variable to store the interval ID
+    let currentView = 'grid'; // Default view
+
+// Add these elements to your existing elements section
+const gridViewBtn = document.getElementById('grid-view-btn');
+const listViewBtn = document.getElementById('list-view-btn');
 
     const tabs = {
         voting: document.getElementById('voting-tab'),
@@ -37,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('breeds-section').classList.remove('hidden');
         } else if (tab === 'favs') {
             document.getElementById('favs-section').classList.remove('hidden');
+            
             loadFavorites(); // Load saved favorites when "Favs" tab is selected
         }
 
@@ -66,6 +72,18 @@ document.addEventListener('DOMContentLoaded', function () {
         addCatToFavorites();
         loadNewCatForVoting(); // Load a new cat image after saving to favorites
         updateFavoriteButton(); // Update the heart button
+    });
+
+    listViewBtn.addEventListener('click', () => {
+        currentView = 'list';
+        loadFavorites();
+        updateViewButtons();
+    });
+
+    gridViewBtn.addEventListener('click', () => {
+        currentView = 'grid';
+        loadFavorites();
+        updateViewButtons();
     });
 
     async function loadBreeds() {
@@ -267,36 +285,180 @@ document.addEventListener('DOMContentLoaded', function () {
     //         });
     // }
 
+    // function loadFavorites() {
+    //     favsContainer.innerHTML = ''; // Clear any previous content
+        
+    //     fetch('/favorites')  // Fetch favorites from the /favorites API endpoint
+    //         .then(response => response.json())  // Parse the JSON response
+    //         .then(favorites => {
+    //             // Remove duplicates based on the image URL or ID (adjust as needed)
+    //             const uniqueFavorites = Array.from(new Set(favorites.map(fav => fav.image.url)))
+    //                 .map(url => favorites.find(fav => fav.image.url === url));
+                
+    //             if (uniqueFavorites.length > 0) {
+    //                 uniqueFavorites.forEach(fav => {
+    //                     // Create an image element for each favorite
+    //                     const favImage = document.createElement('img');
+    //                     favImage.src = fav.image.url;  // Use the nested `image.url`
+    //                     favImage.alt = 'Favorite Cat';
+    //                     favsContainer.appendChild(favImage);  // Add the image to the container
+    //                 });
+    //             } else {
+    //                 favsContainer.innerHTML = '<p>No favorites yet.</p>';
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error loading favorites:', error);
+    //             favsContainer.innerHTML = '<p>Error loading favorites.</p>';
+    //         });
+    // }
+
+    function updateViewButtons() {
+        gridViewBtn.classList.toggle('active', currentView === 'grid');
+        listViewBtn.classList.toggle('active', currentView === 'list');
+    }
+    
+
+    // function loadFavorites() {
+    //     const favsContainer = document.getElementById('favs-container');
+    //     favsContainer.innerHTML = ''; // Clear any previous content
+        
+    //     fetch('/favorites')  // Fetch favorites from the /favorites API endpoint
+    //         .then(response => response.json())  // Parse the JSON response
+    //         .then(favorites => {
+    //             // Remove duplicates based on the image URL or ID (adjust as needed)
+    //             const uniqueFavorites = Array.from(new Set(favorites.map(fav => fav.image.url)))
+    //                 .map(url => favorites.find(fav => fav.image.url === url));
+                
+    //             if (uniqueFavorites.length > 0) {
+    //                 uniqueFavorites.forEach(fav => {
+    //                     // Create a container div for each favorite
+    //                     const favDiv = document.createElement('div');
+    //                     favDiv.classList.add('favorite-cat', 'p-4', 'border', 'rounded-lg', 'bg-white', 'shadow-md');  // Add Tailwind styling for grid or list view
+    
+    //                     // Create an image element for each favorite
+    //                     const favImage = document.createElement('img');
+    //                     favImage.src = fav.image.url;  // Use the nested `image.url`
+    //                     favImage.alt = 'Favorite Cat';
+    //                     favImage.classList.add('w-full', 'h-auto', 'rounded-lg');  // Styling for images
+    //                     favDiv.appendChild(favImage);  // Add the image to the favorite div
+    
+    //                     // Optionally, add a button to remove from favorites
+    //                     const removeBtn = document.createElement('button');
+    //                     removeBtn.classList.add('remove-fav-btn', 'mt-2', 'px-4', 'py-2', 'bg-red-500', 'text-white', 'rounded-lg');
+    //                     removeBtn.textContent = 'Remove';
+    //                     removeBtn.onclick = function() {
+    //                         removeFromFavorites(fav.id);  // Call a function to remove from favorites
+    //                     };
+    //                     favDiv.appendChild(removeBtn);  // Add the button to the favorite div
+    
+    //                     favsContainer.appendChild(favDiv);  // Add the entire div to the container
+    //                 });
+    //             } else {
+    //                 favsContainer.innerHTML = '<p>No favorites yet.</p>';
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error loading favorites:', error);
+    //             favsContainer.innerHTML = '<p>Error loading favorites.</p>';
+    //         });
+    // }
+
     function loadFavorites() {
+        const favsContainer = document.getElementById('favs-container');
         favsContainer.innerHTML = ''; // Clear any previous content
         
-        fetch('/favorites')  // Fetch favorites from the /favorites API endpoint
-            .then(response => response.json())  // Parse the JSON response
+        // Update container classes based on view
+        favsContainer.className = currentView === 'grid' 
+            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'
+            : 'flex flex-col space-y-4 p-4';
+        
+        fetch('/favorites')
+            .then(response => response.json())
             .then(favorites => {
-                // Remove duplicates based on the image URL or ID (adjust as needed)
                 const uniqueFavorites = Array.from(new Set(favorites.map(fav => fav.image.url)))
                     .map(url => favorites.find(fav => fav.image.url === url));
                 
                 if (uniqueFavorites.length > 0) {
                     uniqueFavorites.forEach(fav => {
-                        // Create an image element for each favorite
+                        const favDiv = document.createElement('div');
+                        
+                        // Apply different styles based on view
+                        if (currentView === 'grid') {
+                            favDiv.classList.add(
+                                'favorite-cat',
+                                'p-4',
+                                'border',
+                                'rounded-lg',
+                                'bg-white',
+                                'shadow-md'
+                            );
+                        } else {
+                            favDiv.classList.add(
+                                'favorite-cat',
+                                'flex',
+                                'items-center',
+                                'p-4',
+                                'border',
+                                'rounded-lg',
+                                'bg-white',
+                                'shadow-md'
+                            );
+                        }
+    
+                        // Create image container
+                        const imageContainer = document.createElement('div');
+                        imageContainer.classList.add(currentView === 'list' ? 'w-48' : 'w-full');
+    
+                        // Create image element
                         const favImage = document.createElement('img');
-                        favImage.src = fav.image.url;  // Use the nested `image.url`
+                        favImage.src = fav.image.url;
                         favImage.alt = 'Favorite Cat';
-                        favsContainer.appendChild(favImage);  // Add the image to the container
+                        favImage.classList.add('w-full', 'h-auto', 'rounded-lg', 'object-cover');
+                        if (currentView === 'list') {
+                            favImage.classList.add('h-32');
+                        }
+                        imageContainer.appendChild(favImage);
+    
+                        // Create content container for list view
+                        const contentContainer = document.createElement('div');
+                        if (currentView === 'list') {
+                            contentContainer.classList.add('flex-1', 'ml-4');
+                        } else {
+                            contentContainer.classList.add('mt-2');
+                        }
+    
+                        // Add remove button
+                        const removeBtn = document.createElement('button');
+                        removeBtn.classList.add(
+                            'remove-fav-btn',
+                            'px-4',
+                            'py-2',
+                            'bg-red-500',
+                            'text-white',
+                            'rounded-lg',
+                            'hover:bg-red-600',
+                            'transition-colors'
+                        );
+                        removeBtn.textContent = 'Remove';
+                        removeBtn.onclick = () => removeFromFavorites(fav.id);
+    
+                        // Assemble the components
+                        contentContainer.appendChild(removeBtn);
+                        favDiv.appendChild(imageContainer);
+                        favDiv.appendChild(contentContainer);
+                        favsContainer.appendChild(favDiv);
                     });
                 } else {
-                    favsContainer.innerHTML = '<p>No favorites yet.</p>';
+                    favsContainer.innerHTML = '<p class="text-center text-gray-500">No favorites yet.</p>';
                 }
             })
             .catch(error => {
                 console.error('Error loading favorites:', error);
-                favsContainer.innerHTML = '<p>Error loading favorites.</p>';
+                favsContainer.innerHTML = '<p class="text-center text-red-500">Error loading favorites.</p>';
             });
     }
-    
-    
-    
+
 
     // function addCatToFavorites() {
     //     const catData = {

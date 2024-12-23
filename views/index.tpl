@@ -73,8 +73,19 @@
 
         <!-- Favs Section -->
         <div id="favs-section" class="mb-8 hidden">
-            <div id="favs-container">
-                <!-- Favorite images will be inserted here -->
+            <!-- View Toggle -->
+            <div class="flex justify-start mb-4">
+                <button id="grid-view-btn" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 mr-2 flex items-center" title="Grid View">
+                    <i class="fa fa-th mr-2"></i> Grid View
+                </button>
+                <button id="list-view-btn" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 flex items-center" title="List View">
+                    <i class="fa fa-list mr-2"></i> List View
+                </button>
+            </div>
+
+            <!-- Favorites Container (Initially Grid Layout) -->
+            <div id="favs-container" class="grid grid-cols-2 gap-4">
+                <!-- Favorite images will be inserted here dynamically -->
             </div>
         </div>
     </div>
