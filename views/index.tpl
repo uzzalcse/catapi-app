@@ -33,7 +33,7 @@
 
             <!-- Single Breed Image Container -->
             <div id="breed-image-container" class="mt-4 text-center w-1/2 mx-auto overflow-hidden h-[400px]">
-                <img id="breed-cat-image" src="" alt="Breed Cat" class="mx-auto cover" style="display:none;" />
+                <img id="breed-cat-image" src="" alt="Breed Cat" class="mx-auto contain" style="display:none;" />
             </div>
 
             <!-- Carousel Dots for manual navigation -->

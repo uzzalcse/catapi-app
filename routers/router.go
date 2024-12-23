@@ -11,5 +11,9 @@ func init() {
     beego.Router("/api/cat", &controllers.MainController{}, "get:GetRandomCat")
     beego.Router("/api/breeds", &controllers.MainController{}, "get:GetBreeds")
     beego.Router("/api/vote", &controllers.MainController{}, "post:Vote")
-    beego.Router("/api/favorite", &controllers.MainController{}, "post:ToggleFavorite")
+    // beego.Router("/api/favorites", &controllers.MainController{}, "post:AddToFavorite")
+    beego.Router("/api/breeds/:breed_id/search", &controllers.MainController{}, "get:GetBreedImages")
+    beego.Router("/api/breeds/:breed_id", &controllers.MainController{}, "get:GetBreedInfo")
+    
+
 }
