@@ -14,9 +14,9 @@ func init() {
     beego.Router("/api/votes", &controllers.MainController{}, "get:GetVotes") // Fetch votes
     beego.Router("/api/breeds/:breed_id/search", &controllers.MainController{}, "get:GetBreedImages")
     beego.Router("/api/breeds/:breed_id", &controllers.MainController{}, "get:GetBreedInfo")
-    beego.Router("/favorites", &controllers.MainController{}, "get:GetFavorites")        // Fetch all favorites
-    beego.Router("/favorites", &controllers.MainController{}, "post:AddToFavorite")     // Add a favorite
-    beego.Router("/favorites/:favorite_id", &controllers.MainController{}, "delete:RemoveFromFavorite") // Remove a favorite
+    beego.Router("/api/favorites", &controllers.MainController{}, "get:GetFavorites")        // Fetch all favorites
+    beego.Router("/api/favorites", &controllers.MainController{}, "post:AddToFavorite")     // Add a favorite
+    beego.Router("/api/favorites/:favorite_id", &controllers.MainController{}, "delete:RemoveFromFavorite") // Remove a favorite
         
 
 }
