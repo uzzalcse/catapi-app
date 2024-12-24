@@ -72,13 +72,13 @@ const listViewBtn = document.getElementById('list-view-btn');
     // Event listener for like button
     likeBtn.addEventListener('click', function() {
         postVote(1); // 1 for like vote
-        loadNewCatForVoting();
+        //loadNewCatForVoting();
     });
 
     // Event listener for dislike button
     dislikeBtn.addEventListener('click', function() {
         postVote(-1); // -1 for dislike vote
-        loadNewCatForVoting();
+        //loadNewCatForVoting();
     });
 
     favoriteBtn.addEventListener('click', function () {
