@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 
 	beego "github.com/beego/beego/v2/server/web"
 )
@@ -169,56 +170,132 @@ func (c *MainController) GetBreeds() {
 // }
 
 
+// func (c *MainController) Vote() {
+// 	var vote models.Vote
+// 	// Unmarshal request body into vote struct
+// 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &vote); err != nil {
+// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+// 		c.Data["json"] = map[string]string{"error": err.Error()}
+// 		c.ServeJSON()
+// 		return
+// 	}
+
+// 	// Get API Key and Base URL from config
+// 	apiKey, _ := beego.AppConfig.String("cat_api_key")
+// 	baseURL, _ := beego.AppConfig.String("api_base_url")
+
+// 	// Prepare the request body
+// 	body, _ := json.Marshal(vote)
+// 	req, err := http.NewRequest("POST", baseURL+"/votes", bytes.NewBuffer(body))
+// 	if err != nil {
+// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+// 		c.Data["json"] = map[string]string{"error": "Error creating request"}
+// 		c.ServeJSON()
+// 		return
+// 	}
+
+// 	// Set headers for the request
+// 	req.Header.Add("x-api-key", apiKey)
+// 	req.Header.Add("Content-Type", "application/json")
+
+// 	// Initialize HTTP client
+// 	client := &http.Client{}
+// 	resp, err := client.Do(req)
+// 	if err != nil {
+// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+// 		c.Data["json"] = map[string]string{"error": err.Error()}
+// 		c.ServeJSON()
+// 		return
+// 	}
+// 	defer resp.Body.Close()
+
+// 	// Handle unsuccessful response status
+// 	if resp.StatusCode != http.StatusOK {
+// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+// 		c.Data["json"] = map[string]string{"error": "Failed to submit vote"}
+// 		c.ServeJSON()
+// 		return
+// 	}
+
+// 	// If the request was successful, return success message
+// 	c.Data["json"] = map[string]string{"status": "success"}
+// 	c.ServeJSON()
+// }
+
+
 func (c *MainController) Vote() {
-	var vote models.Vote
-	// Unmarshal request body into vote struct
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &vote); err != nil {
-		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
-		c.Data["json"] = map[string]string{"error": err.Error()}
-		c.ServeJSON()
-		return
-	}
+    var vote models.Vote
 
-	// Get API Key and Base URL from config
-	apiKey, _ := beego.AppConfig.String("cat_api_key")
-	baseURL, _ := beego.AppConfig.String("api_base_url")
+    // Unmarshal request body into vote struct
+    if err := json.Unmarshal(c.Ctx.Input.RequestBody, &vote); err != nil {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+        c.Data["json"] = map[string]string{"error": err.Error()}
+        c.ServeJSON()
+        return
+    }
 
-	// Prepare the request body
-	body, _ := json.Marshal(vote)
-	req, err := http.NewRequest("POST", baseURL+"/votes", bytes.NewBuffer(body))
-	if err != nil {
-		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-		c.Data["json"] = map[string]string{"error": "Error creating request"}
-		c.ServeJSON()
-		return
-	}
+    // Validate the input data
+    if vote.ImageID == "" || (vote.Value != 1 && vote.Value != -1) {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+        c.Data["json"] = map[string]string{"error": "Invalid image_id or value"}
+        c.ServeJSON()
+        return
+    }
 
-	// Set headers for the request
-	req.Header.Add("x-api-key", apiKey)
-	req.Header.Add("Content-Type", "application/json")
+    // Get API Key and Base URL from config
+    apiKey, err := beego.AppConfig.String("cat_api_key")
+    if err != nil || apiKey == "" {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": "Missing API key"}
+        c.ServeJSON()
+        return
+    }
+    baseURL, err := beego.AppConfig.String("api_base_url")
+    if err != nil || baseURL == "" {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": "Missing Base URL"}
+        c.ServeJSON()
+        return
+    }
 
-	// Initialize HTTP client
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-		c.Data["json"] = map[string]string{"error": err.Error()}
-		c.ServeJSON()
-		return
-	}
-	defer resp.Body.Close()
+    // Prepare the request body
+    body, _ := json.Marshal(vote)
+    req, err := http.NewRequest("POST", baseURL+"/votes", bytes.NewBuffer(body))
+    if err != nil {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": "Error creating request"}
+        c.ServeJSON()
+        return
+    }
 
-	// Handle unsuccessful response status
-	if resp.StatusCode != http.StatusOK {
-		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-		c.Data["json"] = map[string]string{"error": "Failed to submit vote"}
-		c.ServeJSON()
-		return
-	}
+    // Set headers for the request
+    req.Header.Add("x-api-key", apiKey)
+    req.Header.Add("Content-Type", "application/json")
 
-	// If the request was successful, return success message
-	c.Data["json"] = map[string]string{"status": "success"}
-	c.ServeJSON()
+    // Initialize HTTP client
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": err.Error()}
+        c.ServeJSON()
+        return
+    }
+    defer resp.Body.Close()
+
+    // Handle response status codes
+    if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+        body, _ := ioutil.ReadAll(resp.Body)
+        c.Ctx.ResponseWriter.WriteHeader(resp.StatusCode)
+        c.Data["json"] = map[string]string{"error": string(body)}
+        c.ServeJSON()
+        return
+    }
+
+    // Return success message
+    body, _ = ioutil.ReadAll(resp.Body)
+    c.Data["json"] = map[string]string{"status": "success", "response": string(body)}
+    c.ServeJSON()
 }
 
 
@@ -507,4 +584,176 @@ func (c *MainController) RemoveFromFavorite() {
 
 	c.Data["json"] = map[string]string{"status": "success"}
 	c.ServeJSON()
+}
+
+
+// func (c *MainController) GetVotes() {
+//     // Get API Key and Base URL from config
+//     apiKey, err := beego.AppConfig.String("cat_api_key")
+//     if err != nil || apiKey == "" {
+//         c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+//         c.Data["json"] = map[string]string{"error": "Missing API key"}
+//         c.ServeJSON()
+//         return
+//     }
+//     baseURL, err := beego.AppConfig.String("api_base_url")
+//     if err != nil || baseURL == "" {
+//         c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+//         c.Data["json"] = map[string]string{"error": "Missing Base URL"}
+//         c.ServeJSON()
+//         return
+//     }
+
+//     // Build the query string using optional parameters from the request
+//     queryParams := c.Ctx.Input.URL()
+//     url := baseURL + "/votes" + queryParams
+
+//     // Create a new GET request
+//     req, err := http.NewRequest("GET", url, nil)
+//     if err != nil {
+//         c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+//         c.Data["json"] = map[string]string{"error": "Error creating request"}
+//         c.ServeJSON()
+//         return
+//     }
+
+//     // Add headers
+//     req.Header.Add("x-api-key", apiKey)
+
+//     // Initialize HTTP client and send the request
+//     client := &http.Client{}
+//     resp, err := client.Do(req)
+//     if err != nil {
+//         c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+//         c.Data["json"] = map[string]string{"error": err.Error()}
+//         c.ServeJSON()
+//         return
+//     }
+//     defer resp.Body.Close()
+
+//     // Handle response status
+//     if resp.StatusCode != http.StatusOK {
+//         body, _ := ioutil.ReadAll(resp.Body)
+//         c.Ctx.ResponseWriter.WriteHeader(resp.StatusCode)
+//         c.Data["json"] = map[string]string{"error": string(body)}
+//         c.ServeJSON()
+//         return
+//     }
+
+//     // Return the response from The Cat API
+//     body, _ := ioutil.ReadAll(resp.Body)
+//     c.Data["json"] = json.RawMessage(body)
+//     c.ServeJSON()
+// }
+
+
+func (c *MainController) GetVotes() {
+    // Get API Key and Base URL from config
+    apiKey, _ := beego.AppConfig.String("cat_api_key")
+    baseURL, _ := beego.AppConfig.String("api_base_url")
+
+    // Build URL with query parameters
+    url := baseURL + "/votes"
+
+    // Get query parameters
+    queryParams := make([]string, 0)
+    
+    // Handle optional parameters
+    if subID := c.GetString("sub_id"); subID != "" {
+        queryParams = append(queryParams, "sub_id="+subID)
+    }
+    if page := c.GetString("page"); page != "" {
+        queryParams = append(queryParams, "page="+page)
+    }
+    if limit := c.GetString("limit"); limit != "" {
+        queryParams = append(queryParams, "limit="+limit)
+    }
+    if order := c.GetString("order"); order != "" {
+        queryParams = append(queryParams, "order="+order)
+    }
+    if attachImage := c.GetString("attach_image"); attachImage != "" {
+        queryParams = append(queryParams, "attach_image="+attachImage)
+    }
+
+    // Add query parameters to URL if any exist
+    if len(queryParams) > 0 {
+        url += "?" + strings.Join(queryParams, "&")
+    }
+
+    // Create request
+    req, err := http.NewRequest("GET", url, nil)
+    if err != nil {
+        c.Data["json"] = map[string]interface{}{
+            "success": false,
+            "message": "Failed to create request",
+            "error":   err.Error(),
+        }
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.ServeJSON()
+        return
+    }
+
+    // Add headers
+    req.Header.Add("x-api-key", apiKey)
+    req.Header.Add("Content-Type", "application/json")
+
+    // Make request
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        c.Data["json"] = map[string]interface{}{
+            "success": false,
+            "message": "Failed to fetch votes",
+            "error":   err.Error(),
+        }
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.ServeJSON()
+        return
+    }
+    defer resp.Body.Close()
+
+    // Read response body
+    body, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        c.Data["json"] = map[string]interface{}{
+            "success": false,
+            "message": "Failed to read response",
+            "error":   err.Error(),
+        }
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.ServeJSON()
+        return
+    }
+
+    // Check if the response status code is not successful
+    if resp.StatusCode != http.StatusOK {
+        c.Data["json"] = map[string]interface{}{
+            "success": false,
+            "message": "API request failed",
+            "error":   string(body),
+        }
+        c.Ctx.ResponseWriter.WriteHeader(resp.StatusCode)
+        c.ServeJSON()
+        return
+    }
+
+    // Parse response into votes array
+    var votes []map[string]interface{}
+    if err := json.Unmarshal(body, &votes); err != nil {
+        c.Data["json"] = map[string]interface{}{
+            "success": false,
+            "message": "Failed to parse response",
+            "error":   err.Error(),
+        }
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.ServeJSON()
+        return
+    }
+
+    // Return success response
+    c.Data["json"] = map[string]interface{}{
+        "success": true,
+        "data":    votes,
+    }
+    c.ServeJSON()
 }
