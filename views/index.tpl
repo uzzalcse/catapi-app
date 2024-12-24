@@ -45,7 +45,7 @@
                 <p id="breed-name" class="font-semibold text-lg"></p>
                 <p id="breed-id" class="text-gray-500"></p>
                 <p id="breed-description" class="text-gray-700 mt-2"></p>
-                <a id="breed-wiki-link">Wikipedia</a>
+                <a id="breed-wiki-link" >Wikipedia</a>
             </div>
         </div>
 

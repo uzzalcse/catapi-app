@@ -5,6 +5,7 @@ import (
 	"catapi-app/models"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -118,111 +119,6 @@ func (c *MainController) GetBreeds() {
 }
 
 
-
-// func (c *MainController) Vote() {
-// 	var vote models.Vote
-// 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &vote); err != nil {
-// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
-// 		c.Data["json"] = map[string]string{"error": err.Error()}
-// 		c.ServeJSON()
-// 		return
-// 	}
-
-// 	errChan := make(chan error)
-
-// 	go func() {
-// 		apiKey, _ := beego.AppConfig.String("cat_api_key")
-// 		baseURL, _ := beego.AppConfig.String("api_base_url")
-
-// 		body, _ := json.Marshal(vote)
-// 		req, err := http.NewRequest("POST", baseURL+"/votes", bytes.NewBuffer(body))
-// 		if err != nil {
-// 			errChan <- err
-// 			return
-// 		}
-
-// 		req.Header.Add("x-api-key", apiKey)
-// 		req.Header.Add("Content-Type", "application/json")
-
-// 		client := &http.Client{}
-// 		resp, err := client.Do(req)
-// 		if err != nil {
-// 			errChan <- err
-// 			return
-// 		}
-// 		defer resp.Body.Close()
-
-// 		if resp.StatusCode != http.StatusOK {
-// 			errChan <- fmt.Errorf("failed to vote")
-// 			return
-// 		}
-
-// 		errChan <- nil
-// 	}()
-
-// 	if err := <-errChan; err != nil {
-// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-// 		c.Data["json"] = map[string]string{"error": err.Error()}
-// 	} else {
-// 		c.Data["json"] = map[string]string{"status": "success"}
-// 	}
-// 	c.ServeJSON()
-// }
-
-
-// func (c *MainController) Vote() {
-// 	var vote models.Vote
-// 	// Unmarshal request body into vote struct
-// 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &vote); err != nil {
-// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
-// 		c.Data["json"] = map[string]string{"error": err.Error()}
-// 		c.ServeJSON()
-// 		return
-// 	}
-
-// 	// Get API Key and Base URL from config
-// 	apiKey, _ := beego.AppConfig.String("cat_api_key")
-// 	baseURL, _ := beego.AppConfig.String("api_base_url")
-
-// 	// Prepare the request body
-// 	body, _ := json.Marshal(vote)
-// 	req, err := http.NewRequest("POST", baseURL+"/votes", bytes.NewBuffer(body))
-// 	if err != nil {
-// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-// 		c.Data["json"] = map[string]string{"error": "Error creating request"}
-// 		c.ServeJSON()
-// 		return
-// 	}
-
-// 	// Set headers for the request
-// 	req.Header.Add("x-api-key", apiKey)
-// 	req.Header.Add("Content-Type", "application/json")
-
-// 	// Initialize HTTP client
-// 	client := &http.Client{}
-// 	resp, err := client.Do(req)
-// 	if err != nil {
-// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-// 		c.Data["json"] = map[string]string{"error": err.Error()}
-// 		c.ServeJSON()
-// 		return
-// 	}
-// 	defer resp.Body.Close()
-
-// 	// Handle unsuccessful response status
-// 	if resp.StatusCode != http.StatusOK {
-// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-// 		c.Data["json"] = map[string]string{"error": "Failed to submit vote"}
-// 		c.ServeJSON()
-// 		return
-// 	}
-
-// 	// If the request was successful, return success message
-// 	c.Data["json"] = map[string]string{"status": "success"}
-// 	c.ServeJSON()
-// }
-
-
 func (c *MainController) Vote() {
     var vote models.Vote
 
@@ -299,57 +195,6 @@ func (c *MainController) Vote() {
 }
 
 
-
-
-// func (c *MainController) AddToFavorite() {
-// 	var fav models.Favorite
-// 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &fav); err != nil {
-// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
-// 		c.Data["json"] = map[string]string{"error": err.Error()}
-// 		c.ServeJSON()
-// 		return
-// 	}
-
-// 	errChan := make(chan error)
-
-// 	go func() {
-// 		apiKey, _ := beego.AppConfig.String("cat_api_key")
-// 		baseURL, _ := beego.AppConfig.String("api_base_url")
-
-// 		body, _ := json.Marshal(map[string]string{"image_id": fav.ImageID})
-// 		req, err := http.NewRequest("POST", baseURL+"/favourites", bytes.NewBuffer(body))
-// 		if err != nil {
-// 			errChan <- err
-// 			return
-// 		}
-
-// 		req.Header.Add("x-api-key", apiKey)
-// 		req.Header.Add("Content-Type", "application/json")
-
-// 		client := &http.Client{}
-// 		resp, err := client.Do(req)
-// 		if err != nil {
-// 			errChan <- err
-// 			return
-// 		}
-// 		defer resp.Body.Close()
-
-// 		if resp.StatusCode != http.StatusOK {
-// 			errChan <- fmt.Errorf("failed to add favorite")
-// 			return
-// 		}
-
-// 		errChan <- nil
-// 	}()
-
-// 	if err := <-errChan; err != nil {
-// 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-// 		c.Data["json"] = map[string]string{"error": err.Error()}
-// 	} else {
-// 		c.Data["json"] = map[string]string{"status": "success"}
-// 	}
-// 	c.ServeJSON()
-// }
 
 func (c *MainController) GetBreedImages() {
 	breedID := c.GetString(":breed_id")
@@ -549,102 +394,79 @@ func (c *MainController) GetFavorites() {
 }
 
 
-// RemoveFromFavorite removes a favorite by its ID
+
+
 func (c *MainController) RemoveFromFavorite() {
-	favoriteID := c.GetString(":favorite_id")
-	if favoriteID == "" {
-		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
-		c.Data["json"] = map[string]string{"error": "favorite_id is required"}
-		c.ServeJSON()
-		return
-	}
+    // Get the favorite_id from the URL parameter
+    favoriteID := c.Ctx.Input.Param(":favorite_id")
+    if favoriteID == "" {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+        c.Data["json"] = map[string]string{"error": "favorite_id is required"}
+        c.ServeJSON()
+        return
+    }
 
-	apiKey, _ := beego.AppConfig.String("cat_api_key")
-	apiURL, _ := beego.AppConfig.String("api_base_url")
+    // Retrieve the API key and base URL from the configuration
+    apiKey, _ := beego.AppConfig.String("cat_api_key")
+    if apiKey == "" {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": "API key is missing"}
+        c.ServeJSON()
+        return
+    }
 
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/favourites/%s", apiURL, favoriteID), nil)
-	if err != nil {
-		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-		c.Data["json"] = map[string]string{"error": err.Error()}
-		c.ServeJSON()
-		return
-	}
+    apiURL, _ := beego.AppConfig.String("api_base_url")
+    if apiURL == "" {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": "Base API URL is missing"}
+        c.ServeJSON()
+        return
+    }
 
-	req.Header.Add("x-api-key", apiKey)
+    // Create the DELETE request to remove the favorite from the Cat API
+    deleteURL := fmt.Sprintf("%s/favourites/%s", apiURL, favoriteID)
+    req, err := http.NewRequest("DELETE", deleteURL, nil)
+    if err != nil {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": "Failed to create request"}
+        c.ServeJSON()
+        return
+    }
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil || resp.StatusCode != http.StatusOK {
-		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-		c.Data["json"] = map[string]string{"error": "Failed to remove favorite"}
-		c.ServeJSON()
-		return
-	}
-	defer resp.Body.Close()
+    req.Header.Add("x-api-key", apiKey)
 
-	c.Data["json"] = map[string]string{"status": "success"}
-	c.ServeJSON()
+    // Perform the DELETE request to the Cat API
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+        c.Data["json"] = map[string]string{"error": "Failed to contact API"}
+        c.ServeJSON()
+        return
+    }
+    defer resp.Body.Close()
+
+    // Check if the response status code is OK (200)
+    if resp.StatusCode != http.StatusOK {
+        c.Ctx.ResponseWriter.WriteHeader(resp.StatusCode)
+        
+        // Read the response body to get a detailed error message
+        body, err := io.ReadAll(resp.Body)
+        if err != nil {
+            c.Data["json"] = map[string]string{"error": "Failed to read response body"}
+            c.ServeJSON()
+            return
+        }
+        
+        c.Data["json"] = map[string]string{"error": string(body)}
+        c.ServeJSON()
+        return
+    }
+
+    // Respond with a success message
+    c.Data["json"] = map[string]string{"status": "success"}
+    c.ServeJSON()
 }
-
-
-// func (c *MainController) GetVotes() {
-//     // Get API Key and Base URL from config
-//     apiKey, err := beego.AppConfig.String("cat_api_key")
-//     if err != nil || apiKey == "" {
-//         c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-//         c.Data["json"] = map[string]string{"error": "Missing API key"}
-//         c.ServeJSON()
-//         return
-//     }
-//     baseURL, err := beego.AppConfig.String("api_base_url")
-//     if err != nil || baseURL == "" {
-//         c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-//         c.Data["json"] = map[string]string{"error": "Missing Base URL"}
-//         c.ServeJSON()
-//         return
-//     }
-
-//     // Build the query string using optional parameters from the request
-//     queryParams := c.Ctx.Input.URL()
-//     url := baseURL + "/votes" + queryParams
-
-//     // Create a new GET request
-//     req, err := http.NewRequest("GET", url, nil)
-//     if err != nil {
-//         c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-//         c.Data["json"] = map[string]string{"error": "Error creating request"}
-//         c.ServeJSON()
-//         return
-//     }
-
-//     // Add headers
-//     req.Header.Add("x-api-key", apiKey)
-
-//     // Initialize HTTP client and send the request
-//     client := &http.Client{}
-//     resp, err := client.Do(req)
-//     if err != nil {
-//         c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
-//         c.Data["json"] = map[string]string{"error": err.Error()}
-//         c.ServeJSON()
-//         return
-//     }
-//     defer resp.Body.Close()
-
-//     // Handle response status
-//     if resp.StatusCode != http.StatusOK {
-//         body, _ := ioutil.ReadAll(resp.Body)
-//         c.Ctx.ResponseWriter.WriteHeader(resp.StatusCode)
-//         c.Data["json"] = map[string]string{"error": string(body)}
-//         c.ServeJSON()
-//         return
-//     }
-
-//     // Return the response from The Cat API
-//     body, _ := ioutil.ReadAll(resp.Body)
-//     c.Data["json"] = json.RawMessage(body)
-//     c.ServeJSON()
-// }
 
 
 func (c *MainController) GetVotes() {

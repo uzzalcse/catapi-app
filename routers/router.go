@@ -19,5 +19,4 @@ func init() {
     beego.Router("/favorites/:favorite_id", &controllers.MainController{}, "delete:RemoveFromFavorite") // Remove a favorite
         
 
-
 }

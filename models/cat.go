@@ -16,6 +16,7 @@ type Breed struct {
     Description  string `json:"description"`
     Temperament  string `json:"temperament"`
     Origin       string `json:"origin"`
+    Wikipedia_url string `json:"wikipedia_url"`
 }
 
 type Vote struct {

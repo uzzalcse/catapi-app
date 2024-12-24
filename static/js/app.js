@@ -183,6 +183,7 @@ const listViewBtn = document.getElementById('list-view-btn');
                 const breedName = document.getElementById('breed-name');
                 const breedIdElem = document.getElementById('breed-id');
                 const breedDescription = document.getElementById('breed-description');
+                const breedWikiLink = document.getElementById('breed-wiki-link');
                 const dotsContainer = document.getElementById('carousel-dots');
                 dotsContainer.innerHTML = ''; // Clear previous dots
     
@@ -190,6 +191,9 @@ const listViewBtn = document.getElementById('list-view-btn');
                 breedName.textContent = breedData.name || 'Unknown Breed';
                 breedIdElem.textContent = `Breed ID: ${breedData.id}`;
                 breedDescription.textContent = breedData.description || 'No description available.';
+                breedWikiLink.href = `${breedData.wikipedia_url}`;
+
+                console.log('Breed wiki link:', breedWikiLink.href);
     
                 // Store the images data in a variable accessible to the changeImage function
                 window.breedImages = imageData;
@@ -260,122 +264,11 @@ const listViewBtn = document.getElementById('list-view-btn');
         catImage.style.display = 'block';
     }
 
-    // function loadFavorites() {
-    //     favsContainer.innerHTML = '';
-    //     if (favoriteCats.length > 0) {
-    //         favoriteCats.forEach(fav => {
-    //             const favImage = document.createElement('img');
-    //             favImage.src = fav.url;
-    //             favImage.alt = fav.name || 'Favorite Cat';
-    //             favsContainer.appendChild(favImage);
-    //         });
-    //     } else {
-    //         favsContainer.innerHTML = '<p>No favorites yet.</p>';
-    //     }
-    // }
-
-    // function loadFavorites() {
-    //     favsContainer.innerHTML = ''; // Clear any previous content
-    
-    //     fetch('/favorites')  // Fetch favorites from the /favorites API endpoint
-    //         .then(response => response.json())  // Parse the JSON response
-    //         .then(favorites => {
-    //             if (favorites.length > 0) {
-    //                 favorites.forEach(fav => {
-    //                     // Create an image element for each favorite
-    //                     const favImage = document.createElement('img');
-    //                     favImage.src = fav.image.url;  // Use the nested `image.url`
-    //                     favImage.alt = 'Favorite Cat';
-    //                     favsContainer.appendChild(favImage);  // Add the image to the container
-    //                 });
-    //             } else {
-    //                 favsContainer.innerHTML = '<p>No favorites yet.</p>';
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error loading favorites:', error);
-    //             favsContainer.innerHTML = '<p>Error loading favorites.</p>';
-    //         });
-    // }
-
-    // function loadFavorites() {
-    //     favsContainer.innerHTML = ''; // Clear any previous content
-        
-    //     fetch('/favorites')  // Fetch favorites from the /favorites API endpoint
-    //         .then(response => response.json())  // Parse the JSON response
-    //         .then(favorites => {
-    //             // Remove duplicates based on the image URL or ID (adjust as needed)
-    //             const uniqueFavorites = Array.from(new Set(favorites.map(fav => fav.image.url)))
-    //                 .map(url => favorites.find(fav => fav.image.url === url));
-                
-    //             if (uniqueFavorites.length > 0) {
-    //                 uniqueFavorites.forEach(fav => {
-    //                     // Create an image element for each favorite
-    //                     const favImage = document.createElement('img');
-    //                     favImage.src = fav.image.url;  // Use the nested `image.url`
-    //                     favImage.alt = 'Favorite Cat';
-    //                     favsContainer.appendChild(favImage);  // Add the image to the container
-    //                 });
-    //             } else {
-    //                 favsContainer.innerHTML = '<p>No favorites yet.</p>';
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error loading favorites:', error);
-    //             favsContainer.innerHTML = '<p>Error loading favorites.</p>';
-    //         });
-    // }
-
     function updateViewButtons() {
         gridViewBtn.classList.toggle('active', currentView === 'grid');
         listViewBtn.classList.toggle('active', currentView === 'list');
     }
     
-
-    // function loadFavorites() {
-    //     const favsContainer = document.getElementById('favs-container');
-    //     favsContainer.innerHTML = ''; // Clear any previous content
-        
-    //     fetch('/favorites')  // Fetch favorites from the /favorites API endpoint
-    //         .then(response => response.json())  // Parse the JSON response
-    //         .then(favorites => {
-    //             // Remove duplicates based on the image URL or ID (adjust as needed)
-    //             const uniqueFavorites = Array.from(new Set(favorites.map(fav => fav.image.url)))
-    //                 .map(url => favorites.find(fav => fav.image.url === url));
-                
-    //             if (uniqueFavorites.length > 0) {
-    //                 uniqueFavorites.forEach(fav => {
-    //                     // Create a container div for each favorite
-    //                     const favDiv = document.createElement('div');
-    //                     favDiv.classList.add('favorite-cat', 'p-4', 'border', 'rounded-lg', 'bg-white', 'shadow-md');  // Add Tailwind styling for grid or list view
-    
-    //                     // Create an image element for each favorite
-    //                     const favImage = document.createElement('img');
-    //                     favImage.src = fav.image.url;  // Use the nested `image.url`
-    //                     favImage.alt = 'Favorite Cat';
-    //                     favImage.classList.add('w-full', 'h-auto', 'rounded-lg');  // Styling for images
-    //                     favDiv.appendChild(favImage);  // Add the image to the favorite div
-    
-    //                     // Optionally, add a button to remove from favorites
-    //                     const removeBtn = document.createElement('button');
-    //                     removeBtn.classList.add('remove-fav-btn', 'mt-2', 'px-4', 'py-2', 'bg-red-500', 'text-white', 'rounded-lg');
-    //                     removeBtn.textContent = 'Remove';
-    //                     removeBtn.onclick = function() {
-    //                         removeFromFavorites(fav.id);  // Call a function to remove from favorites
-    //                     };
-    //                     favDiv.appendChild(removeBtn);  // Add the button to the favorite div
-    
-    //                     favsContainer.appendChild(favDiv);  // Add the entire div to the container
-    //                 });
-    //             } else {
-    //                 favsContainer.innerHTML = '<p>No favorites yet.</p>';
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error loading favorites:', error);
-    //             favsContainer.innerHTML = '<p>Error loading favorites.</p>';
-    //         });
-    // }
 
     function loadFavorites() {
         const favsContainer = document.getElementById('favs-container');
@@ -441,7 +334,7 @@ const listViewBtn = document.getElementById('list-view-btn');
                             contentContainer.classList.add('mt-2');
                         }
     
-                        // Add remove button
+                        // Add remove button with dynamic favorite_id
                         const removeBtn = document.createElement('button');
                         removeBtn.classList.add(
                             'remove-fav-btn',
@@ -454,7 +347,8 @@ const listViewBtn = document.getElementById('list-view-btn');
                             'transition-colors'
                         );
                         removeBtn.textContent = 'Remove';
-                        removeBtn.onclick = () => removeFromFavorites(fav.id);
+                        removeBtn.dataset.favoriteId = fav.id;  // Store the favorite_id in a data attribute
+                        removeBtn.onclick = () => removeFromFavorites(fav.id);  // Pass the id dynamically
     
                         // Assemble the components
                         contentContainer.appendChild(removeBtn);
@@ -471,21 +365,28 @@ const listViewBtn = document.getElementById('list-view-btn');
                 favsContainer.innerHTML = '<p class="text-center text-red-500">Error loading favorites.</p>';
             });
     }
-
-
-    // function addCatToFavorites() {
-    //     const catData = {
-    //         id: currentImageId,
-    //         url: catImage.src,
-    //         name: catImage.alt || 'Unnamed Cat'
-    //     };
-
-    //     if (!favoriteCats.some(cat => cat.id === catData.id)) {
-    //         favoriteCats.push(catData);
-    //         localStorage.setItem('favoriteCats', JSON.stringify(favoriteCats));
-    //         console.log('Cat added to favorites:', catData);
-    //     }
-    // }
+    
+    function removeFromFavorites(favoriteID) {
+        fetch(`/favorites/${favoriteID}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    console.log('Favorite removed successfully');
+                    loadFavorites(); // Reload favorites after removal
+                } else {
+                    console.error('Error:', result.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error removing favorite:', error);
+            });
+    }
+    
 
     function addCatToFavorites() {
         const catData = {
