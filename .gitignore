@@ -17,10 +17,7 @@ vendor/
 # Go workspace file
 go.work
 
-# Beego specific files
-conf/app.conf
-logs/
-upload/
+
 
 # IDE specific files
 .idea/
