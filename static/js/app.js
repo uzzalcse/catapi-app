@@ -181,6 +181,7 @@ const listViewBtn = document.getElementById('list-view-btn');
                 // Clear previous images
                 const breedImage = document.getElementById('breed-cat-image');
                 const breedName = document.getElementById('breed-name');
+                const breedOrigin = document.getElementById('breed-origin');
                 const breedIdElem = document.getElementById('breed-id');
                 const breedDescription = document.getElementById('breed-description');
                 const breedWikiLink = document.getElementById('breed-wiki-link');
@@ -189,6 +190,7 @@ const listViewBtn = document.getElementById('list-view-btn');
     
                 // Set breed details
                 breedName.textContent = breedData.name || 'Unknown Breed';
+                breedOrigin.textContent = `Origin: ${breedData.origin || 'Unknown'}`;
                 breedIdElem.textContent = `Breed ID: ${breedData.id}`;
                 breedDescription.textContent = breedData.description || 'No description available.';
                 breedWikiLink.href = `${breedData.wikipedia_url}`;
