@@ -22,6 +22,7 @@ type Breed struct {
 type Vote struct {
     ImageID string `json:"image_id"`
     Value   int    `json:"value"` // 1 for like, -1 for dislike
+    SubID   string `json:"sub_id"` // SubID can be null
 }
 
 

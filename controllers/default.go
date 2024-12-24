@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 
@@ -156,6 +157,7 @@ func (c *MainController) Vote() {
 
     // Prepare the request body
     body, _ := json.Marshal(vote)
+	log.Println("vote", vote)
     req, err := http.NewRequest("POST", baseURL+"/votes", bytes.NewBuffer(body))
     if err != nil {
         c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
