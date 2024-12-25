@@ -8,85 +8,89 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body class=" breeds mt-4 border-solid border-2 ring-gray-200">
-    <div class="container mx-auto">
-        <div class="tabs flex justify-center space-x-4 mb-8">
-            <button id="voting-tab" class="tab-btn active">
-                <i class="fas fa-arrow-up-arrow-down"></i>
-                <span>Voting</span>
-            </button>
-            <button id="breeds-tab" class="tab-btn">
-                <i class="fas fa-search"></i>
-                <span>Breeds</span>
-            </button>
-            <button id="favs-tab" class="tab-btn">
-                <i class="fas fa-heart"></i>
-                <span>Favs</span>
-            </button>
-        </div>
-
-        <!-- Breeds Section -->
-        <div id="breeds-section" class="mb-8 ">
-            <select id="breed-select" class="w-full max-w-xs mx-auto block p-2 border rounded-lg">
-                <option value="">Select Breed</option>
-            </select>
-
-            <!-- Single Breed Image Container -->
-            <div id="breed-image-container" class="mt-4 text-center w-1/2 mx-auto ">
-                <img id="breed-cat-image" style="height:300px" src="" alt="Breed Cat" class="mx-auto contain" style="display:none;" />
+<body class="breeds min-h-screen bg-gray-50 p-4 flex items-center justify-center">
+    <div class="container max-w-md mx-auto">
+        <div class="w-full bg-white rounded-2xl shadow-lg overflow-hidden">
+            <!-- Tab Navigation -->
+            <div class="tabs flex border-b">
+                <button id="voting-tab" class="tab-btn active flex items-center gap-2 px-6 py-4 text-orange-500 border-b-2 border-orange-500">
+                    <i class="fas fa-arrow-up-arrow-down"></i>
+                    <span>Voting</span>
+                </button>
+                <button id="breeds-tab" class="tab-btn flex items-center gap-2 px-6 py-4 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-search"></i>
+                    <span>Breeds</span>
+                </button>
+                <button id="favs-tab" class="tab-btn flex items-center gap-2 px-6 py-4 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-heart"></i>
+                    <span>Favs</span>
+                </button>
             </div>
 
-            <!-- Carousel Dots for manual navigation -->
-            <div id="carousel-dots" class="flex justify-center mt-2 space-x-2">
-                <!-- Dots will be dynamically added here -->
-            </div>
+            <!-- Breeds Section -->
+            <div id="breeds-section" class="hidden p-4">
+                <select id="breed-select" class="w-full p-4 pr-12 text-lg border rounded-xl appearance-none">
+                    <option value="">Select Breed</option>
+                </select>
 
-            <div id="breed-details" class="mt-4">
-                <span id="breed-name" class="font-semibold text-lg"></span>
-                <span id="breed-origin"></span>
-                <span id="breed-id" class="text-gray-500"></span>
-                <p id="breed-description" class="text-gray-700 mt-2"></p>
-                <a id="breed-wiki-link" >Wikipedia</a>
-            </div>
-        </div>
+                <div id="breed-image-container" class="mt-4 text-center">
+                    <img id="breed-cat-image" style="height:250px" src="" alt="Breed Cat" class="w-full h-[400px] object-cover rounded-lg px-20" style="display:none;" />
+                </div>
 
-        <!-- Cat Image Section -->
-        <div id="cat-display" class="cat-container max-w-2xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-            <div id="loading" class="hidden">
-                <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-            </div>
+                <div id="carousel-dots" class="flex justify-center mt-2 space-x-2">
+                    <!-- Dots will be dynamically added here -->
+                </div>
 
-            <div id="cat-image-section" class="relative">
-                <img id="cat-image" src="" alt="Cat" class="w-full object-cover">
-                <div class="action-buttons absolute bottom-4 left-0 right-0 flex justify-center space-x-4">
-                    <button id="dislike-btn" class="action-btn bg-white p-3 rounded-full shadow-lg">
-                        <i class="fas fa-thumbs-down text-red-500"></i>
-                    </button>
-                    <button id="favorite-btn" class="action-btn bg-white p-3 rounded-full shadow-lg animate-pulse">
-                        <i class="fas fa-heart text-gray-400"></i>
-                    </button>
-                    <button id="like-btn" class="action-btn bg-white p-3 rounded-full shadow-lg">
-                        <i class="fas fa-thumbs-up text-green-500"></i>
-                    </button>
+                <div id="breed-details" class="mt-4">
+                    <span id="breed-name" class="font-semibold text-lg"></span>
+                    <span id="breed-origin"></span>
+                    <span id="breed-id" class="text-gray-500"></span>
+                    <p id="breed-description" class="text-gray-700 mt-2"></p>
+                    <a id="breed-wiki-link" class="text-blue-500 hover:underline">Wikipedia</a>
                 </div>
             </div>
-        </div>
 
-        <!-- Favs Section -->
-        <div id="favs-section" class="mb-8 hidden">
-            <!-- View Toggle -->
-            <div class="flex justify-start mb-4">
-                <button id="grid-view-btn" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 mr-2 flex items-center" title="Grid View">
-                    <i class="fa fa-th mr-2"></i> Grid View
+            <!-- Cat Image Section -->
+<div id="cat-display" class="cat-container relative">
+    <div id="loading" class="hidden absolute inset-0 flex items-center justify-center bg-white/75">
+        <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+    </div>
+
+    <div class="flex flex-col">
+        <div id="cat-image-section">
+            <img id="cat-image" src="" alt="Cat" class="w-full h-[400px] object-cover">
+        </div>
+        
+        <div class="action-buttons flex justify-between items-center px-4 py-3">
+            <button id="favorite-btn" class="action-btn">
+                <i class="far fa-heart text-2xl"></i>
+            </button>
+            <div class="flex gap-8">
+                <button id="like-btn" class="action-btn">
+                    <i class="far fa-thumbs-up text-2xl"></i>
                 </button>
-                <button id="list-view-btn" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 flex items-center" title="List View">
-                    <i class="fa fa-list mr-2"></i> List View
+                <button id="dislike-btn" class="action-btn">
+                    <i class="far fa-thumbs-down text-2xl"></i>
                 </button>
             </div>
+        </div>
+    </div>
+</div>
 
-            <!-- Favorites Container (Initially Grid Layout) -->
-            <div id="favs-container" class="grid grid-cols-2 gap-4">
-                <!-- Favorite images will be inserted here dynamically -->
+            <!-- Favs Section -->
+            <div id="favs-section" class="hidden p-4">
+                <div class="flex justify-start mb-4">
+                    <button id="grid-view-btn" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 mr-2 flex items-center" title="Grid View">
+                        <i class="fa fa-th mr-2"></i> Grid View
+                    </button>
+                    <button id="list-view-btn" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 flex items-center" title="List View">
+                        <i class="fa fa-list mr-2"></i> List View
+                    </button>
+                </div>
+
+                <div id="favs-container" class="grid grid-cols-2 gap-4">
+                    <!-- Favorite images will be inserted here dynamically -->
+                </div>
             </div>
         </div>
     </div>
