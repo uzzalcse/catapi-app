@@ -369,18 +369,121 @@ const listViewBtn = document.getElementById('list-view-btn');
     // }
     
 
+    // function loadFavorites() {
+    //     const favsContainer = document.getElementById('favs-container');
+    //     favsContainer.innerHTML = ''; // Clear any previous content
+        
+    //     // Add a wrapper div with fixed height and scrollable behavior
+    //     favsContainer.className = 'h-[calc(100vh-100px)] overflow-y-auto'; // Adjust 100px based on your header/navigation height
+        
+    //     // Add inner container for grid/list layouts
+    //     const innerContainer = document.createElement('div');
+    //     innerContainer.className = currentView === 'grid' 
+    //         ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'
+    //         : 'flex flex-col space-y-4 p-4';
+    //     favsContainer.appendChild(innerContainer);
+        
+    //     fetch('api/favorites')
+    //         .then(response => response.json())
+    //         .then(favorites => {
+    //             const uniqueFavorites = Array.from(new Set(favorites.map(fav => fav.image.url)))
+    //                 .map(url => favorites.find(fav => fav.image.url === url));
+                
+    //             if (uniqueFavorites.length > 0) {
+    //                 uniqueFavorites.forEach(fav => {
+    //                     const favDiv = document.createElement('div');
+                        
+    //                     // Apply different styles based on view
+    //                     if (currentView === 'grid') {
+    //                         favDiv.classList.add(
+    //                             'favorite-cat',
+    //                             'p-4',
+    //                             'border',
+    //                             'rounded-lg',
+    //                             'bg-white',
+    //                             'shadow-md'
+    //                         );
+    //                     } else {
+    //                         favDiv.classList.add(
+    //                             'favorite-cat',
+    //                             'flex',
+    //                             'items-center',
+    //                             'p-4',
+    //                             'border',
+    //                             'rounded-lg',
+    //                             'bg-white',
+    //                             'shadow-md'
+    //                         );
+    //                     }
+    
+    //                     // Create image container
+    //                     const imageContainer = document.createElement('div');
+    //                     imageContainer.classList.add(
+    //                         currentView === 'list' ? 'w-48' : 'w-full',
+    //                         'flex-shrink-0' // Prevent image from shrinking in list view
+    //                     );
+    
+    //                     // Create image element
+    //                     const favImage = document.createElement('img');
+    //                     favImage.src = fav.image.url;
+    //                     favImage.alt = 'Favorite Cat';
+    //                     favImage.classList.add('w-full', 'h-auto', 'rounded-lg', 'object-cover');
+    //                     if (currentView === 'list') {
+    //                         favImage.classList.add('h-32');
+    //                     }
+    //                     imageContainer.appendChild(favImage);
+    
+    //                     // Create content container for list view
+    //                     const contentContainer = document.createElement('div');
+    //                     if (currentView === 'list') {
+    //                         contentContainer.classList.add('flex-1', 'ml-4');
+    //                     } else {
+    //                         contentContainer.classList.add('mt-2');
+    //                     }
+    
+    //                     // Add remove button with dynamic favorite_id
+    //                     const removeBtn = document.createElement('button');
+    //                     removeBtn.classList.add(
+    //                         'remove-fav-btn',
+    //                         'px-4',
+    //                         'py-2',
+    //                         'bg-red-500',
+    //                         'text-white',
+    //                         'rounded-lg',
+    //                         'hover:bg-red-600',
+    //                         'transition-colors'
+    //                     );
+    //                     removeBtn.textContent = 'Remove';
+    //                     removeBtn.dataset.favoriteId = fav.id;
+    //                     removeBtn.onclick = () => removeFromFavorites(fav.id);
+    
+    //                     // Assemble the components
+    //                     contentContainer.appendChild(removeBtn);
+    //                     favDiv.appendChild(imageContainer);
+    //                     favDiv.appendChild(contentContainer);
+    //                     innerContainer.appendChild(favDiv);
+    //                 });
+    //             } else {
+    //                 innerContainer.innerHTML = '<p class="text-center text-gray-500">No favorites yet.</p>';
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error loading favorites:', error);
+    //             innerContainer.innerHTML = '<p class="text-center text-red-500">Error loading favorites.</p>';
+    //         });
+    // }
+
     function loadFavorites() {
         const favsContainer = document.getElementById('favs-container');
-        favsContainer.innerHTML = ''; // Clear any previous content
+        favsContainer.innerHTML = '';
         
-        // Add a wrapper div with fixed height and scrollable behavior
-        favsContainer.className = 'h-[calc(100vh-100px)] overflow-y-auto'; // Adjust 100px based on your header/navigation height
+        // Set container to be scrollable
+        favsContainer.className = 'h-[calc(100vh-200px)] overflow-y-auto p-4';
         
-        // Add inner container for grid/list layouts
         const innerContainer = document.createElement('div');
         innerContainer.className = currentView === 'grid' 
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'
-            : 'flex flex-col space-y-4 p-4';
+            ? 'grid grid-cols-3 gap-1.5'  // Changed to 2 columns
+            : 'flex flex-col space-y-4';
         favsContainer.appendChild(innerContainer);
         
         fetch('api/favorites')
@@ -393,15 +496,14 @@ const listViewBtn = document.getElementById('list-view-btn');
                     uniqueFavorites.forEach(fav => {
                         const favDiv = document.createElement('div');
                         
-                        // Apply different styles based on view
                         if (currentView === 'grid') {
                             favDiv.classList.add(
                                 'favorite-cat',
-                                'p-4',
                                 'border',
-                                'rounded-lg',
+                                
                                 'bg-white',
-                                'shadow-md'
+                                'shadow-md',
+                                'overflow-hidden'  // Added for image containment
                             );
                         } else {
                             favDiv.classList.add(
@@ -410,38 +512,35 @@ const listViewBtn = document.getElementById('list-view-btn');
                                 'items-center',
                                 'p-4',
                                 'border',
-                                'rounded-lg',
+                               
                                 'bg-white',
                                 'shadow-md'
                             );
                         }
     
-                        // Create image container
                         const imageContainer = document.createElement('div');
                         imageContainer.classList.add(
                             currentView === 'list' ? 'w-48' : 'w-full',
-                            'flex-shrink-0' // Prevent image from shrinking in list view
+                            'flex-shrink-0'
                         );
     
-                        // Create image element
                         const favImage = document.createElement('img');
                         favImage.src = fav.image.url;
                         favImage.alt = 'Favorite Cat';
-                        favImage.classList.add('w-full', 'h-auto', 'rounded-lg', 'object-cover');
-                        if (currentView === 'list') {
-                            favImage.classList.add('h-32');
+                        if (currentView === 'grid') {
+                            favImage.classList.add('w-full', 'h-64', 'object-cover');  // Fixed height for grid view
+                        } else {
+                            favImage.classList.add('w-full', 'h-32',  'object-cover');
                         }
                         imageContainer.appendChild(favImage);
     
-                        // Create content container for list view
                         const contentContainer = document.createElement('div');
                         if (currentView === 'list') {
                             contentContainer.classList.add('flex-1', 'ml-4');
                         } else {
-                            contentContainer.classList.add('mt-2');
+                            contentContainer.classList.add('p-4');  // Added padding for grid view
                         }
     
-                        // Add remove button with dynamic favorite_id
                         const removeBtn = document.createElement('button');
                         removeBtn.classList.add(
                             'remove-fav-btn',
@@ -451,13 +550,13 @@ const listViewBtn = document.getElementById('list-view-btn');
                             'text-white',
                             'rounded-lg',
                             'hover:bg-red-600',
-                            'transition-colors'
+                            'transition-colors',
+                            'w-full'  // Make button full width in grid view
                         );
                         removeBtn.textContent = 'Remove';
                         removeBtn.dataset.favoriteId = fav.id;
                         removeBtn.onclick = () => removeFromFavorites(fav.id);
     
-                        // Assemble the components
                         contentContainer.appendChild(removeBtn);
                         favDiv.appendChild(imageContainer);
                         favDiv.appendChild(contentContainer);
