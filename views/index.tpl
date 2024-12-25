@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
+<body class=" breeds mt-4 border-solid border-2 ring-gray-200">
+    <div class="container mx-auto">
         <div class="tabs flex justify-center space-x-4 mb-8">
             <button id="voting-tab" class="tab-btn active">
                 <i class="fas fa-arrow-up-arrow-down"></i>
@@ -26,14 +26,14 @@
         </div>
 
         <!-- Breeds Section -->
-        <div id="breeds-section" class="mb-8 hidden">
+        <div id="breeds-section" class="mb-8 ">
             <select id="breed-select" class="w-full max-w-xs mx-auto block p-2 border rounded-lg">
                 <option value="">Select Breed</option>
             </select>
 
             <!-- Single Breed Image Container -->
-            <div id="breed-image-container" class="mt-4 text-center w-1/2 mx-auto overflow-hidden h-[400px]">
-                <img id="breed-cat-image" src="" alt="Breed Cat" class="mx-auto contain" style="display:none;" />
+            <div id="breed-image-container" class="mt-4 text-center w-1/2 mx-auto ">
+                <img id="breed-cat-image" style="height:300px" src="" alt="Breed Cat" class="mx-auto contain" style="display:none;" />
             </div>
 
             <!-- Carousel Dots for manual navigation -->
@@ -42,9 +42,9 @@
             </div>
 
             <div id="breed-details" class="mt-4">
-                <p id="breed-name" class="font-semibold text-lg"></p>
-                <p id="breed-origin"></p>
-                <p id="breed-id" class="text-gray-500"></p>
+                <span id="breed-name" class="font-semibold text-lg"></span>
+                <span id="breed-origin"></span>
+                <span id="breed-id" class="text-gray-500"></span>
                 <p id="breed-description" class="text-gray-700 mt-2"></p>
                 <a id="breed-wiki-link" >Wikipedia</a>
             </div>

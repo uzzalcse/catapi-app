@@ -190,8 +190,8 @@ const listViewBtn = document.getElementById('list-view-btn');
     
                 // Set breed details
                 breedName.textContent = breedData.name || 'Unknown Breed';
-                breedOrigin.textContent = `Origin: ${breedData.origin || 'Unknown'}`;
-                breedIdElem.textContent = `Breed ID: ${breedData.id}`;
+                breedOrigin.textContent = `(${breedData.origin || 'Unknown'})`;
+                breedIdElem.textContent = `${breedData.id}`;
                 breedDescription.textContent = breedData.description || 'No description available.';
                 breedWikiLink.href = `${breedData.wikipedia_url}`;
 
@@ -272,14 +272,116 @@ const listViewBtn = document.getElementById('list-view-btn');
     }
     
 
+    // function loadFavorites() {
+    //     const favsContainer = document.getElementById('favs-container');
+    //     favsContainer.innerHTML = ''; // Clear any previous content
+        
+    //     // Update container classes based on view
+    //     favsContainer.className = currentView === 'grid' 
+    //         ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'
+    //         : 'flex flex-col space-y-4 p-4';
+        
+    //     fetch('api/favorites')
+    //         .then(response => response.json())
+    //         .then(favorites => {
+    //             const uniqueFavorites = Array.from(new Set(favorites.map(fav => fav.image.url)))
+    //                 .map(url => favorites.find(fav => fav.image.url === url));
+                
+    //             if (uniqueFavorites.length > 0) {
+    //                 uniqueFavorites.forEach(fav => {
+    //                     const favDiv = document.createElement('div');
+                        
+    //                     // Apply different styles based on view
+    //                     if (currentView === 'grid') {
+    //                         favDiv.classList.add(
+    //                             'favorite-cat',
+    //                             'p-4',
+    //                             'border',
+    //                             'rounded-lg',
+    //                             'bg-white',
+    //                             'shadow-md'
+    //                         );
+    //                     } else {
+    //                         favDiv.classList.add(
+    //                             'favorite-cat',
+    //                             'flex',
+    //                             'items-center',
+    //                             'p-4',
+    //                             'border',
+    //                             'rounded-lg',
+    //                             'bg-white',
+    //                             'shadow-md'
+    //                         );
+    //                     }
+    
+    //                     // Create image container
+    //                     const imageContainer = document.createElement('div');
+    //                     imageContainer.classList.add(currentView === 'list' ? 'w-48' : 'w-full');
+    
+    //                     // Create image element
+    //                     const favImage = document.createElement('img');
+    //                     favImage.src = fav.image.url;
+    //                     favImage.alt = 'Favorite Cat';
+    //                     favImage.classList.add('w-full', 'h-auto', 'rounded-lg', 'object-cover');
+    //                     if (currentView === 'list') {
+    //                         favImage.classList.add('h-32');
+    //                     }
+    //                     imageContainer.appendChild(favImage);
+    
+    //                     // Create content container for list view
+    //                     const contentContainer = document.createElement('div');
+    //                     if (currentView === 'list') {
+    //                         contentContainer.classList.add('flex-1', 'ml-4');
+    //                     } else {
+    //                         contentContainer.classList.add('mt-2');
+    //                     }
+    
+    //                     // Add remove button with dynamic favorite_id
+    //                     const removeBtn = document.createElement('button');
+    //                     removeBtn.classList.add(
+    //                         'remove-fav-btn',
+    //                         'px-4',
+    //                         'py-2',
+    //                         'bg-red-500',
+    //                         'text-white',
+    //                         'rounded-lg',
+    //                         'hover:bg-red-600',
+    //                         'transition-colors'
+    //                     );
+    //                     removeBtn.textContent = 'Remove';
+    //                     removeBtn.dataset.favoriteId = fav.id;  // Store the favorite_id in a data attribute
+    //                     removeBtn.onclick = () => removeFromFavorites(fav.id);  // Pass the id dynamically
+    
+    //                     // Assemble the components
+    //                     contentContainer.appendChild(removeBtn);
+    //                     favDiv.appendChild(imageContainer);
+    //                     favDiv.appendChild(contentContainer);
+    //                     favsContainer.appendChild(favDiv);
+    //                 });
+    //             } else {
+    //                 favsContainer.innerHTML = '<p class="text-center text-gray-500">No favorites yet.</p>';
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error loading favorites:', error);
+    //             favsContainer.innerHTML = '<p class="text-center text-red-500">Error loading favorites.</p>';
+    //         });
+    // }
+    
+
     function loadFavorites() {
         const favsContainer = document.getElementById('favs-container');
         favsContainer.innerHTML = ''; // Clear any previous content
         
-        // Update container classes based on view
-        favsContainer.className = currentView === 'grid' 
+        // Add a wrapper div with fixed height and scrollable behavior
+        favsContainer.className = 'h-[calc(100vh-100px)] overflow-y-auto'; // Adjust 100px based on your header/navigation height
+        
+        // Add inner container for grid/list layouts
+        const innerContainer = document.createElement('div');
+        innerContainer.className = currentView === 'grid' 
             ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4'
             : 'flex flex-col space-y-4 p-4';
+        favsContainer.appendChild(innerContainer);
         
         fetch('api/favorites')
             .then(response => response.json())
@@ -316,7 +418,10 @@ const listViewBtn = document.getElementById('list-view-btn');
     
                         // Create image container
                         const imageContainer = document.createElement('div');
-                        imageContainer.classList.add(currentView === 'list' ? 'w-48' : 'w-full');
+                        imageContainer.classList.add(
+                            currentView === 'list' ? 'w-48' : 'w-full',
+                            'flex-shrink-0' // Prevent image from shrinking in list view
+                        );
     
                         // Create image element
                         const favImage = document.createElement('img');
@@ -349,25 +454,25 @@ const listViewBtn = document.getElementById('list-view-btn');
                             'transition-colors'
                         );
                         removeBtn.textContent = 'Remove';
-                        removeBtn.dataset.favoriteId = fav.id;  // Store the favorite_id in a data attribute
-                        removeBtn.onclick = () => removeFromFavorites(fav.id);  // Pass the id dynamically
+                        removeBtn.dataset.favoriteId = fav.id;
+                        removeBtn.onclick = () => removeFromFavorites(fav.id);
     
                         // Assemble the components
                         contentContainer.appendChild(removeBtn);
                         favDiv.appendChild(imageContainer);
                         favDiv.appendChild(contentContainer);
-                        favsContainer.appendChild(favDiv);
+                        innerContainer.appendChild(favDiv);
                     });
                 } else {
-                    favsContainer.innerHTML = '<p class="text-center text-gray-500">No favorites yet.</p>';
+                    innerContainer.innerHTML = '<p class="text-center text-gray-500">No favorites yet.</p>';
                 }
             })
             .catch(error => {
                 console.error('Error loading favorites:', error);
-                favsContainer.innerHTML = '<p class="text-center text-red-500">Error loading favorites.</p>';
+                innerContainer.innerHTML = '<p class="text-center text-red-500">Error loading favorites.</p>';
             });
     }
-    
+
     function removeFromFavorites(favoriteID) {
         fetch(`/api/favorites/${favoriteID}`, {
             method: 'DELETE',
