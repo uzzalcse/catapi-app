@@ -51,16 +51,45 @@ const listViewBtn = document.getElementById('list-view-btn');
     }
 
     // Event listeners for tab switching
+    // Object.keys(tabs).forEach(tab => {
+    //     tabs[tab].addEventListener('click', function () {
+    //         currentTab = tab;
+
+    //         // Remove the active class from all tabs
+    //         document.querySelector('.tab-btn.active').classList.remove('active');
+
+    //         // Add the active class to the clicked tab
+    //         tabs[tab].classList.add('active');
+    //         tabs[tab].classList.add('text-orange-500');
+    //         tabs[tab].classList.add('border-b-2');
+    //         tabs[tab].classList.add('border-orange-500');
+    //         tabs[tab].classList.remove('text-gray-500');
+
+    //         // Show the corresponding content for the selected tab
+    //         showTabContent(tab);
+    //     });
+    // });
+
     Object.keys(tabs).forEach(tab => {
         tabs[tab].addEventListener('click', function () {
             currentTab = tab;
-
-            // Remove the active class from all tabs
-            document.querySelector('.tab-btn.active').classList.remove('active');
-
-            // Add the active class to the clicked tab
+    
+            // Remove all active classes and reset styles from all tabs
+            Object.values(tabs).forEach(tabElement => {
+                tabElement.classList.remove('active');
+                tabElement.classList.remove('text-orange-500');
+                tabElement.classList.remove('border-b-2');
+                tabElement.classList.remove('border-orange-500');
+                tabElement.classList.add('text-gray-500');
+            });
+    
+            // Add the active classes to the clicked tab
             tabs[tab].classList.add('active');
-
+            tabs[tab].classList.add('text-orange-500');
+            tabs[tab].classList.add('border-b-2');
+            tabs[tab].classList.add('border-orange-500');
+            tabs[tab].classList.remove('text-gray-500');
+    
             // Show the corresponding content for the selected tab
             showTabContent(tab);
         });
@@ -108,7 +137,7 @@ const listViewBtn = document.getElementById('list-view-btn');
             const breeds = await response.json();
             console.log('Breeds loaded:', breeds);
 
-            breedSelect.innerHTML = '<option value="">Select Breed</option>';
+            breedSelect.innerHTML = '';
             breeds.forEach(breed => {
                 const option = document.createElement('option');
                 option.value = breed.id;
@@ -482,7 +511,7 @@ const listViewBtn = document.getElementById('list-view-btn');
         favsContainer.innerHTML = '';
         
         // Set container to be scrollable
-        favsContainer.className = 'h-[calc(100vh-200px)] overflow-y-auto p-4';
+        favsContainer.className = 'h-[450px] overflow-y-auto p-4';
         
         const innerContainer = document.createElement('div');
         innerContainer.className = currentView === 'grid' 

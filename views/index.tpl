@@ -10,11 +10,12 @@
 </head>
 <body class="breeds min-h-screen bg-gray-50 p-4 flex items-center justify-center">
     <div class="container max-w-md mx-auto">
-        <div class="w-full bg-white rounded-2xl shadow-lg overflow-hidden h-[615px]">
+        <div class="w-full bg-white rounded-2xl shadow-lg overflow-hidden h-[675px]">
             <!-- Tab Navigation -->
             <div class="tabs flex border-b">
                 <button  id="voting-tab" class="tab-btn active flex items-center gap-2 px-6 py-4 text-orange-500 border-b-2 border-orange-500">
-                    <i class="fas fa-arrow-up-arrow-down"></i>
+                    
+                    <i class="fa-solid fa-arrows-up-down"></i>
                     <span>Voting</span>
                 </button>
                 <button id="breeds-tab" class="tab-btn flex items-center gap-2 px-6 py-4 text-gray-500 hover:text-gray-700">
@@ -29,8 +30,8 @@
 
             <!-- Breeds Section -->
             <div id="breeds-section" class="hidden p-4">
-                <select id="breed-select" class="w-full p-4 pr-12 text-lg border rounded-xl appearance-none">
-                    <option value="">Select Breed</option>
+                <select id="breed-select" class="w-full px-4 py-2 pr-12 text-lg border rounded-xl appearance-none focus:border-blue-500">
+
                 </select>
 
                 <div id="breed-image-container" class="mt-4 text-center">
@@ -46,7 +47,7 @@
                     <span id="breed-origin"></span>
                     <span id="breed-id" class="text-gray-500"></span>
                     <p id="breed-description" class="text-gray-700 mt-2"></p>
-                    <a id="breed-wiki-link" class="text-blue-500 hover:underline">Wikipedia</a>
+                    <a id="breed-wiki-link" class="text-orange-500 hover:underline">WIKIPEDIA</a>
                 </div>
             </div>
 
@@ -78,7 +79,7 @@
 </div>
 
             <!-- Favs Section -->
-            <div id="favs-section" class="hidden p-4">
+            <div id="favs-section" class="hidden p-4 h-[500px]">
                 <div class="flex justify-start mb-4">
                     <button id="grid-view-btn" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 mr-2 flex items-center" title="Grid View">
                         <i class="fa fa-th mr-2"></i> Grid View
@@ -88,7 +89,7 @@
                     </button>
                 </div>
 
-                <div id="favs-container" class="grid grid-cols-2 gap-4 h-[440px]">
+                <div id="favs-container" class="grid grid-cols-2 gap-4 ">
                     <!-- Favorite images will be inserted here dynamically -->
                 </div>
             </div>
