@@ -10,7 +10,7 @@
 </head>
 <body class="breeds min-h-screen bg-gray-50 p-4 flex items-center justify-center">
     <div class="container max-w-md mx-auto">
-        <div class="w-full bg-white rounded-2xl shadow-lg overflow-hidden h-[675px]">
+        <div class="w-full bg-white rounded-2xl shadow-lg overflow-hidden h-[675px] flex flex-col">
             <!-- Tab Navigation -->
             <div class="tabs flex border-b">
                 <button  id="voting-tab" class="tab-btn active flex items-center gap-2 px-6 py-4 text-orange-500 border-b-2 border-orange-500">
@@ -52,17 +52,17 @@
             </div>
 
             <!-- Cat Image Section -->
-<div id="cat-display" class="cat-container relative">
-    <div id="loading" class="hidden absolute inset-0 flex items-center justify-center bg-white/75">
+<div id="cat-display" class="cat-container relative h-full w-full">
+    <div id="loading" class="hidden absolute  flex items-center justify-center bg-white/75 h-full w-full">
         <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
     </div>
 
-    <div class="flex flex-col">
-        <div id="cat-image-section">
+    <div class="flex flex-col h-full">
+        <div id="cat-image-section" style="display: flex; justify-content: center; align-items: center; flex-grow: 1; height: 100%;">
             <img id="cat-image" src="" alt="Cat" class="w-full h-[400px] object-cover">
         </div>
         
-        <div id="voting-btns" class="action-buttons flex justify-between items-center px-4 py-3">
+        <div id="voting-btns" class="action-buttons flex justify-between items-center px-4 py-3 pt-0">
             <button id="favorite-btn" class="action-btn">
                 <i class="far fa-heart text-2xl"></i>
             </button>
