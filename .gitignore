@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+catapi-app
 coverage.html
 coverage.out
 
