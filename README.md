@@ -122,7 +122,8 @@ go test -v ./tests
 
 Generate coverage report:
 ```bash
-go test -v -coverprofile=coverage.out ./tests
+go test ./... -cover
+go test ./... -coverprofile=coverage.out
 go tool cover -html=coverage.out -o coverage.html
 ```
 
