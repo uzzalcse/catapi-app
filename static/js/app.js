@@ -21,6 +21,7 @@ const listViewBtn = document.getElementById('list-view-btn');
     const breedSelect = document.getElementById('breed-select');
     const catImage = document.getElementById('cat-image');
     const loading = document.getElementById('loading');
+    const votingBtns = document.getElementById('voting-btns');
     const dislikeBtn = document.getElementById('dislike-btn');
     const likeBtn = document.getElementById('like-btn');
     const favoriteBtn = document.getElementById('favorite-btn');
@@ -135,6 +136,7 @@ const listViewBtn = document.getElementById('list-view-btn');
     // Function to load new cat image for "Voting" tab
     async function loadNewCatForVoting() {
         console.log('Loading new cat for voting...');
+
         showLoading();
         try {
             const response = await fetch(`/api/cat`);
@@ -257,6 +259,7 @@ const listViewBtn = document.getElementById('list-view-btn');
         }
     });
     function showLoading() {
+        votingBtns.style.display = 'none';
         loading.style.display = 'block';
         catImage.style.display = 'none';
     }
@@ -264,6 +267,7 @@ const listViewBtn = document.getElementById('list-view-btn');
     function hideLoading() {
         loading.style.display = 'none';
         catImage.style.display = 'block';
+        votingBtns.style.display = 'flex';
     }
 
     function updateViewButtons() {

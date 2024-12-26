@@ -10,10 +10,10 @@
 </head>
 <body class="breeds min-h-screen bg-gray-50 p-4 flex items-center justify-center">
     <div class="container max-w-md mx-auto">
-        <div class="w-full bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="w-full bg-white rounded-2xl shadow-lg overflow-hidden h-[615px]">
             <!-- Tab Navigation -->
             <div class="tabs flex border-b">
-                <button id="voting-tab" class="tab-btn active flex items-center gap-2 px-6 py-4 text-orange-500 border-b-2 border-orange-500">
+                <button  id="voting-tab" class="tab-btn active flex items-center gap-2 px-6 py-4 text-orange-500 border-b-2 border-orange-500">
                     <i class="fas fa-arrow-up-arrow-down"></i>
                     <span>Voting</span>
                 </button>
@@ -61,7 +61,7 @@
             <img id="cat-image" src="" alt="Cat" class="w-full h-[400px] object-cover">
         </div>
         
-        <div class="action-buttons flex justify-between items-center px-4 py-3">
+        <div id="voting-btns" class="action-buttons flex justify-between items-center px-4 py-3">
             <button id="favorite-btn" class="action-btn">
                 <i class="far fa-heart text-2xl"></i>
             </button>
@@ -88,7 +88,7 @@
                     </button>
                 </div>
 
-                <div id="favs-container" class="grid grid-cols-2 gap-4">
+                <div id="favs-container" class="grid grid-cols-2 gap-4 h-[440px]">
                     <!-- Favorite images will be inserted here dynamically -->
                 </div>
             </div>
