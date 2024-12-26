@@ -1,4 +1,3 @@
-// routers/router.go
 package routers
 
 import (
@@ -16,7 +15,5 @@ func init() {
     beego.Router("/api/breeds/:breed_id", &controllers.MainController{}, "get:GetBreedInfo")
     beego.Router("/api/favorites", &controllers.MainController{}, "get:GetFavorites")        // Fetch all favorites
     beego.Router("/api/favorites", &controllers.MainController{}, "post:AddToFavorite")     // Add a favorite
-    beego.Router("/api/favorites/:favorite_id", &controllers.MainController{}, "delete:RemoveFromFavorite") // Remove a favorite
-        
-
+    beego.Router("/api/favorites/:favorite_id", &controllers.MainController{}, "delete:RemoveFromFavorite") // Remove a favorite        
 }

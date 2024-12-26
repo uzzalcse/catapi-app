@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body class="breeds min-h-screen bg-gray-50 p-4 flex items-center justify-center">
-    <div class="container max-w-md mx-auto">
+    <div class="container max-w-xl mx-auto">
         <div class="w-full bg-white rounded-2xl shadow-lg overflow-hidden h-[675px] flex flex-col">
             <!-- Tab Navigation -->
-            <div class="tabs flex border-b">
+            <div class="tabs flex border-b justify-start">
                 <button  id="voting-tab" class="tab-btn active flex items-center gap-2 px-6 py-4 text-orange-500 border-b-2 border-orange-500">
                     
                     <i class="fa-solid fa-arrows-up-down"></i>

@@ -1,4 +1,3 @@
-// models/cat.go
 package models
 
 type Cat struct {
