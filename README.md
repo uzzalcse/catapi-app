@@ -91,7 +91,8 @@ api_base_url = https://api.thecatapi.com/v1
 go run main.go
 ```
 
-The application will be available at `http://localhost:8080`
+The application will be available at 
+http://localhost:8080/
 
 ## 🔌 API Endpoints
 
