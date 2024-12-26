@@ -6,7 +6,7 @@
     <title>Cat Browser</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body class="breeds min-h-screen bg-gray-50 p-4 flex items-center justify-center">
     <div class="container max-w-xl mx-auto">
@@ -35,7 +35,7 @@
                 </select>
 
                 <div id="breed-image-container" class="mt-4 text-center">
-                    <img id="breed-cat-image" style="height:250px" src="" alt="Breed Cat" class="w-full h-[400px] object-cover rounded-lg px-20" style="display:none;" />
+                    <img id="breed-cat-image" style="height:250px" src="" alt="Breed Cat" class="w-full h-[400px] object-contain rounded-lg px-20" style="display:none;" />
                 </div>
 
                 <div id="carousel-dots" class="flex justify-center mt-2 space-x-2">
@@ -53,8 +53,11 @@
 
             <!-- Cat Image Section -->
 <div id="cat-display" class="cat-container relative h-full w-full">
-    <div id="loading" class="hidden absolute  flex items-center justify-center bg-white/75 h-full w-full">
-        <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+    <div id="loading" class="hidden">
+        <div class="w-full h-full flex justify-center items-center">
+                <img class="animate-pulse h-16 w-16" src="static/img/loading-image.svg" alt="loading-image">
+
+        </div>
     </div>
 
     <div class="flex flex-col h-full">

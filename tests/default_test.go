@@ -39,4 +39,73 @@ func TestBeego(t *testing.T) {
 	        })
 	})
 }
+func TestGetRandomCat(t *testing.T) {
+	r, _ := http.NewRequest("GET", "/api/cat", nil)
+	w := httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	Convey("Test GetRandomCat endpoint", t, func() {
+		Convey("Status Code Should Be 200", func() {
+			So(w.Code, ShouldEqual, 200)
+		})
+		Convey("Response should be JSON", func() {
+			So(w.Header().Get("Content-Type"), ShouldContainSubstring, "application/json")
+		})
+		Convey("Response body should not be empty", func() {
+			So(w.Body.Len(), ShouldBeGreaterThan, 0)
+		})
+	})
+}
+
+func TestGetBreeds(t *testing.T) {
+	r, _ := http.NewRequest("GET", "/api/breeds", nil)
+	w := httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	Convey("Test GetBreeds endpoint", t, func() {
+		Convey("Status Code Should Be 200", func() {
+			So(w.Code, ShouldEqual, 200)
+		})
+		Convey("Response should be JSON", func() {
+			So(w.Header().Get("Content-Type"), ShouldContainSubstring, "application/json")
+		})
+		Convey("Response body should not be empty", func() {
+			So(w.Body.Len(), ShouldBeGreaterThan, 0)
+		})
+	})
+}
+
+func TestGetBreedInfo(t *testing.T) {
+	r, _ := http.NewRequest("GET", "/api/breeds/abys", nil)
+	w := httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	Convey("Test GetBreedInfo endpoint", t, func() {
+		Convey("Status Code Should Be 200", func() {
+			So(w.Code, ShouldEqual, 200)
+		})
+		Convey("Response should be JSON", func() {
+			So(w.Header().Get("Content-Type"), ShouldContainSubstring, "application/json")
+		})
+		Convey("Response body should not be empty", func() {
+			So(w.Body.Len(), ShouldBeGreaterThan, 0)
+		})
+	})
+}
+
+func TestGetFavorites(t *testing.T) {
+	r, _ := http.NewRequest("GET", "/api/favorites", nil)
+	w := httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+
+	Convey("Test GetFavorites endpoint", t, func() {
+		Convey("Status Code Should Be 200", func() {
+			So(w.Code, ShouldEqual, 200)
+		})
+		Convey("Response should be JSON", func() {
+			So(w.Header().Get("Content-Type"), ShouldContainSubstring, "application/json")
+		})
+	})
+}
+
 
