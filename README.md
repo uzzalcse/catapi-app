@@ -131,6 +131,26 @@ View coverage in terminal:
 go tool cover -func=coverage.out
 ```
 
+## API responses in browser 
+
+Get all votes order by descending order
+
+http://localhost:8080/api/votes?order=DESC
+
+Get latest 10 votes
+
+http://localhost:8080/api/votes?limit=10&order=DESC
+
+
+Get all votes of with the sub_id
+
+http://localhost:8080/api/votes?sub_id=user-123
+
+Get favorites from api 
+
+http://localhost:8080/api/favorites
+
+
 ## 📚 API Reference
 This project uses [The Cat API](https://thecatapi.com/). To get started:
 1. Sign up at [https://thecatapi.com/](https://thecatapi.com/)
