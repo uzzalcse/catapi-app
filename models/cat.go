@@ -24,8 +24,6 @@ type Vote struct {
     SubID   string `json:"sub_id"` // SubID can be null
 }
 
-
-
 type BreedImage struct {
 	ID     string `json:"id"`
 	URL    string `json:"url"`
